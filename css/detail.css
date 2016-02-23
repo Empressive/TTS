@@ -1,0 +1,12 @@
+.textarea_detail {
+    width: 100%;
+    resize: none;
+    height: 120px;
+    border-radius: 10px;
+}
+.textarea_detail_fix {
+    width: 50%;
+    resize: none;
+    height: 120px;
+    border-radius: 10px;
+}

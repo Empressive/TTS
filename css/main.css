@@ -1,0 +1,268 @@
+@-moz-document url-prefix()
+{
+    li {
+        list-style-type: none;
+    }
+}
+.page {
+    width: 80%;
+    margin: auto;
+}
+.menu {
+    margin: 0 0 20px 0;
+    width: 100%;
+    height: 50px;
+    background-color: #339999;
+    opacity: .9;
+    border-radius: 10px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+}
+ul{
+    padding:0;
+}
+ul li{
+    float:left;
+    height: 50px;
+}
+ul li a{
+    text-decoration:none;
+    padding:15px 0;
+    width:150px;
+    color: white;
+    text-shadow: 0 1px 1px #2D2020;
+    float:left;
+    text-align:center;
+    font-weight:bold;
+    font-size:14px;
+}
+li:hover{
+    background-color: #c1c1c1;
+}
+.links {
+    margin: 0 0 0 5%;
+}
+.links2 {
+    margin: 0 0 0 55%;
+}
+.logo a {
+    text-decoration: none;
+    width: 5%;
+    position: absolute;
+    font-size: 25px;
+    margin: 11px 0 0 80px;
+    color: white;
+    text-shadow: 1px 1px 1px #2D2020;
+}
+
+table {
+    overflow: hidden;
+    table-layout: fixed;
+    font-size: 14px;
+    border-radius: 10px;
+    border-spacing: 0;
+    text-align: center;
+    box-shadow: 2px 3px 2px rgba(0,0,0,0.5);
+}
+th {
+    opacity: .9;
+    background: #339999;
+    color: white;
+    text-shadow: 0 1px 1px #2D2020;
+    padding: 5px 10px;
+}
+th, td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+}
+th:first-child, td:first-child {
+
+}
+th:first-child {
+    border-top-left-radius: 10px;
+}
+th:last-child {
+    border-top-right-radius: 10px;
+    border-right: none;
+}
+td {
+    padding: 5px 10px;
+}
+tr:last-child td:first-child {
+    border-radius: 0 0 0 10px;
+}
+tr:last-child td:last-child {
+    border-radius: 0 0 10px 0;
+}
+tr td:last-child {
+    border-right: none;
+}
+
+.border {
+    text-align: center;
+    border: none;
+    box-shadow: none;
+}
+
+.filter
+{
+    text-align: center;
+    width: 80%;
+    margin: auto;
+}
+div.ui-datepicker{
+    font-size:15px;
+}
+input[type=text]
+{
+    outline: none;
+    text-align: center;
+    border-radius: 10px;
+    width: 100%;
+    height: 25px;
+}
+.login {
+    margin: 20% auto;
+    width: 30%;
+}
+.login input[type=text], input[type=password], input[type=submit] {
+    outline: none;
+    text-align: center;
+    height: 35px;
+    border-radius: 10px;
+    width: 200px;
+}
+#title {
+    height: 35px;
+    font-size: 16px;
+}
+input[type=submit] {
+    outline: none;
+    color: white;
+    background-color: #339999;
+}
+input[type=submit]:hover {
+    background-color: #07b1b2;
+}
+.menu_button {
+    margin: 0 0 0 20%;
+    width: 80%;
+    height: 50px;
+    overflow: hidden;
+}
+#cursor {
+    cursor: pointer;
+}
+select {
+    outline: none;
+    text-align: center;
+    border-radius: 10px;
+    width: 100%;
+    height: 25px;
+}
+#more {
+    margin: 10px 0 0 40%;
+}
+.announce {
+    opacity: .9;
+    margin: 20px auto;
+}
+.announce td {
+    border-bottom-color: white;
+}
+.announce tr:last-child td {
+    border-bottom: none;
+}
+#td_color {
+    color: white;
+    text-shadow: 0 1px 1px #2D2020;
+    box-shadow: none;
+    font-weight: bold;
+}
+.button_align{
+    margin:  30px;
+    text-align: center;
+}
+#support_title {
+    color: #4b78bb;
+    text-align: center;
+    font-size: 16px;
+}
+
+#support_title2{
+    color: #6f7882;
+    text-align: center;
+    font-size: 13px;
+}
+#suggestion {
+    margin: 30px auto;
+}
+
+.subject {
+    text-align: center;
+    border-radius: 10px;
+    margin: 20px 0 10px 0;
+    resize: none;
+    height: 25px;
+    width: 250px;
+}
+.suggestion_comment {
+    border-radius: 10px;
+    resize: none;
+    height: 150px;
+    width: 450px;
+}
+#suggestion_button {
+    margin: 20px auto;
+    text-align: center;
+}
+.control_admin {
+    width:250px;
+    background-color: #339999;
+    opacity: .9;
+    border-radius: 10px;
+    height: 400px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+}
+
+.control_moder {
+    width:250px;
+    background-color: #339999;
+    opacity: .9;
+    border-radius: 10px;
+    height: 120px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+}
+
+.control ul{
+    padding:0;
+}
+.control ul li{
+    float:left;
+    height: 40px;
+}
+.control ul li a{
+    text-decoration:none;
+    width:250px;
+    color: white;
+    text-shadow: 0 1px 1px #2D2020;
+    float:left;
+    text-align:center;
+    font-weight:bold;
+    font-size:14px;
+}
+.control  li:hover{
+    border-radius: 10px;
+    background-color: #c1c1c1;
+}
+
+.union {
+    width: 50%;
+    margin: -250px auto;
+}
+.agreement {
+    text-decoration: none;
+}
+.agreement:visited {
+    color: #0000FF;
+}

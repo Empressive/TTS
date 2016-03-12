@@ -1,5 +1,6 @@
 <?php
 #Добавление сотрудников в бд
+include('../config.php');
 
 $login = htmlspecialchars(trim($_POST['login']));
 $user = htmlspecialchars(trim($_POST['user']));
@@ -11,17 +12,20 @@ $passw2 = htmlspecialchars(trim($_POST['passw2']));
 if($passw == $passw2)
 {
     include_once ('../library/UnionDB.php');
+
     UnionDB::connectDb();
     mysql_query("SELECT login FROM staff_login WHERE login = '$login'");
-    if($resault = mysql_fetch_assoc($query)) echo "<div class='alert'>Логин занят !</div>";
-    else {
 
+    if($result = mysql_fetch_assoc($query)) header("Location: $local/pages/502.html");
+    else {
         $passw = md5(md5($passw.'secret'));
 
-        mysql_query("INSERT INTO staff_login VALUES ('', '$login', '$user', '$group', '$passw', '', '', '', '$access')");
+        mysql_query("INSERT INTO staff_login VALUES ('', '$login', '$user', '$group', '$passw', '', '', '', '', '', '$access')");
         mysql_query("INSERT INTO staff_name VALUES ('', '$user')");
 
-        if(include('../config.php')) header("Location: $local?page=control");
+        if($group == 4) mysql_query("INSERT INTO millwright VALUES ('','$user','1')");
+
+        header("Location: $local?page=control");
     }
-}
-else echo "<div class='alert'>Пароли не совпадают !</div>";
+} else header("Location: $local/pages/502.html");
+

@@ -4,7 +4,7 @@ class UnionDB
 {
     public static function connectDb()
     {
-        mysql_connect("localhost", "user", "password") or die (mysql_error());
+        mysql_connect("localhost", "LOGIN", "PASSWORD") or die (mysql_error());
         mysql_query('SET NAMES utf8');
         mysql_select_db("tts_db") or die(mysql_error());
     }

@@ -32,10 +32,7 @@ class UnionCore
             $result = mysql_fetch_assoc($query);
 
             $this->user_access = $result['access_id'];
-        }
-
-        elseif (isset($_COOKIE['user_id']) && isset($_COOKIE['token']))
-        {
+        } elseif (isset($_COOKIE['user_id']) && isset($_COOKIE['token'])) {
 
             $id = intval($_COOKIE['user_id']);
 
@@ -58,12 +55,12 @@ class UnionCore
 
     public function loadRequest()
     {
-        if ($this->user_id !== 0) {
+        if ($this->user_id !== 0 && $this->user_access > 0) {
             if ($_GET['page']) {
 
                 $request = htmlspecialchars(trim($_GET['page']));
                 $page = "pages/$request.php";
-                $error= "pages/404.php";
+                $error = "pages/404.php";
 
                 if (file_exists($page)) $this->page = $page;
                 else $this->page = $error;
@@ -74,8 +71,7 @@ class UnionCore
                 $this->page = $tablePage;
 
             }
-        }
-        else $this->page = "pages/log.php";
+        } else $this->page = "pages/log.php";
     }
 
     public function includeContent()
@@ -84,9 +80,18 @@ class UnionCore
 
         include_once('include/header.php');
 
-        if(!isset($_GET['page']) && $this->user_id > 0) include_once ('include/announce.php');
+        if ($this->user_access == 3) {
+            if (($_GET['page'] == 'control') || ($_GET['page'] == 'user') || ($_GET['page'] == 'announcement') || ($_GET['page'] == 'edit') || ($_GET['page'] == 'millwright') || ($_GET['page'] == 'announce')) include_once('include/control.php');
+        }
 
-        if(!isset($_GET['page']) && $this->user_id > 0) include_once ('include/filter.php');
+        if ($this->user_access == 2) {
+            if (($_GET['page'] == 'moder') || ($_GET['page'] == 'announcement') || ($_GET['page'] == 'announce') && $this->user_access == 2) include_once('include/moder.php');
+        }
+
+
+        if (!isset($_GET['page']) && $this->user_id > 0 && $this->user_access > 0) include_once('include/announce.php');
+
+        if (!isset($_GET['page']) && $this->user_id > 0 && $this->user_access > 0) include_once('include/filter.php');
 
         include_once("$this->page");
 

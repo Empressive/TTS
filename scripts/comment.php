@@ -23,4 +23,5 @@ if (isset($_GET['id'])) {
 
         header("Location: $local?page=detail&id=$item_id");
     } else header("Location: $local?page=detail&id=$item_id");
-} else echo "<div class='alert'>Идентификатор не передан !</div>";
+} else header("Location: $local/pages/502.html");
+

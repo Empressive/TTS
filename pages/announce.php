@@ -11,8 +11,6 @@ if (include('config.php'))
     }
 }
 ?>
-<div id="support_title">Форма управления оповещениями</div>
-<div id="support_title2">Выберите оповещения, которые вы хотите закрыть.</div>
 <form action="../scripts/announce.php" method="post">
 <?php
 
@@ -24,8 +22,8 @@ $query = mysql_query("SELECT comment_id, staff_name, now_date, comment, status_i
 
 if(mysql_num_rows($query) > 0)
 {
-    echo "<table id='suggestion'>";
-    echo "<tr><th width='2%'></th><th width='3%'>ID оповещения</th><th width='20%'>Сотрудник</th><th width='15%'>Дата оповещения</th><th>Текст оповещения</th></tr>";
+    echo "<table id='announce_table'>";
+    echo "<tr><th width='10%'></th><th width='30%'>Сотрудник</th><th width='25%'>Дата оповещения</th><th>Текст оповещения</th></tr>";
 
     while($result = mysql_fetch_assoc($query))
     {
@@ -37,13 +35,13 @@ if(mysql_num_rows($query) > 0)
         $comment = $result['comment'];
 
         if($status_id == 1) {
-            echo "<tr bgcolor='#cccccc'><td><input disabled type='checkbox' name='id[]' value='$id'></td><td>$id</td><td>$staff_name</td><td>$now_date</td><td>$comment</td></tr>";
+            echo "<tr bgcolor='#cccccc'><td><input disabled type='checkbox' name='id[]' value='$id'></td><td>$staff_name</td><td>$now_date</td><td>$comment</td></tr>";
         }
-        else echo "<tr bgcolor='#66cc66'><td><input type='checkbox' name='id[]' value='$id'></td><td>$id</td><td>$staff_name</td><td>$now_date</td><td>$comment</td></tr>";
+        else echo "<tr bgcolor='#66cc66'><td><input type='checkbox' name='id[]' value='$id'></td><td>$staff_name</td><td>$now_date</td><td>$comment</td></tr>";
 
     }
+    echo "<tr bgcolor='#cccccc'><td colspan='4'><input type='submit' value='Закрыть'></td></tr>";
     echo "</table>";;
 }
 ?>
-<div id="suggestion_button"><input type="submit" value="Закрыть"></div>
 </form>

@@ -20,8 +20,7 @@ if(isset($_POST['comment']) && $_POST['comment'] != null) {
     if(mysql_numrows($query) < 3) {
         mysql_query("INSERT INTO announcement VALUES ('', '$user_id', '$now_date', '$comment', '$comment_type_id', '')");
         header("Location: $local");
-    }
-    echo "Число оповещений больше трех, закройте предыдущие оповещения !";
+    } else header("Location: $local/pages/503.html");
 } header("Location: $local");
 ?>
 </html>

@@ -4,12 +4,14 @@ include_once "library/UnionDB.php";
 UnionDB::connectDb();
 
 ?>
+<div id="date_filter"><button id="date_button"><img id="res_img" src="../img/closer.png"></button></div>
 <div id="reset_button"><button id="res_button"><img id="res_img" src="../img/trash.png"></button></div>
 <table class="filter">
     <tr>
         <th>Статус</th>
         <th>Категория</th>
         <th>Дата</th>
+        <th id="date_col">Конечная дата</th>
         <th>Исполнитель</th>
         <th>Заявка</th>
         <th>Договор</th>
@@ -43,14 +45,24 @@ UnionDB::connectDb();
                 ?>
             </select>
         </td>
-        <td><input class="input_filter" id='datepicker' name='date' autocomplete='off'></td>
+        <?php
+        $query = mysql_query("SELECT time_date FROM staff_login WHERE id = {$user_id}");
+        $result = mysql_fetch_assoc($query);
+
+        $time_date = $result['time_date'];
+
+        echo "<td><input class='input_filter' id='datepicker' name='date' autocomplete='off' value='$time_date'></td>"
+        ?>
+        <td id="date_col2">
+            <input class='input_filter' id='end_date' name='end_date' autocomplete='off'>
+        </td>
         <td><select class="input_filter" name='staffGroup'
                     id='staffGroup'>
                 <?php
-                $query = mysql_query("SELECT staff_group_id FROM staff_login WHERE id = {$user_id}");
+                $query = mysql_query("SELECT group_id FROM staff_login WHERE id = {$user_id}");
                 $result = mysql_fetch_assoc($query);
 
-                $value = $result['staff_group_id'];
+                $value = $result['group_id'];
 
                 $query = mysql_query("SELECT staff_group FROM staff_group WHERE staff_group_id = {$value}");
                 $result = mysql_fetch_assoc($query);
@@ -65,6 +77,13 @@ UnionDB::connectDb();
         </td>
         <td><input class="input_filter" name='application' autocomplete='off' onchange="this.form.submit()">
         </td>
-        <td><input class="input_filter" name='agreement' autocomplete='off' id='agreement'></td>
+        <?php
+        $query = mysql_query("SELECT agreement FROM staff_login WHERE id = {$user_id}");
+        $result = mysql_fetch_assoc($query);
+
+        $agreement = $result['agreement'];
+
+        echo "<td><input class='input_filter' name='agreement' autocomplete='off' id='agreement' value='$agreement'></td>"
+        ?>
     </tr>
 </table>

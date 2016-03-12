@@ -5,3 +5,14 @@
     width: 100%;
     height: 25px;
 }
+#date_col {
+    display: none;
+}
+#date_col2 {
+    display: none;
+}
+#date_button {
+    outline: none;
+    background: none;
+    border-style: none;
+}

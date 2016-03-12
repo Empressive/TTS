@@ -13,11 +13,14 @@
     <link rel="stylesheet" href="../css/filter.css">
     <link rel="stylesheet" href="../css/table.css">
     <link rel="stylesheet" href="../css/detail.css">
+    <link rel="stylesheet" href="../css/404.css">
+    <link href='https://fonts.googleapis.com/css?family=Kurale&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="../img/favicon.png"/>
     <script src="../js/jquery-1.12.0.min.js"></script>
     <script src="../js/jquery-ui.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
     <script src="../js/jquery.maskedinput.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/noty/packaged/jquery.noty.packaged.min.js"></script>
     <script type="text/javascript" src="../js/scripts.js"></script>
 </head>
 </html>

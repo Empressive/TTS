@@ -15,6 +15,7 @@ if(isset($_GET['id']))
     $status_id = htmlspecialchars(trim($_POST['status']));
     $category_id = htmlspecialchars(trim($_POST['category']));
     $executor_id = htmlspecialchars(trim($_POST['executor']));
+    $location = intval($_POST['location']);
     $house = htmlspecialchars(trim($_POST['house']));
     $driveway = htmlspecialchars(trim($_POST['driveway']));
     $floor = htmlspecialchars(trim($_POST['floor']));
@@ -30,6 +31,20 @@ if(isset($_GET['id']))
 
     $millwright3 = intval($_POST['millwright3']);
 
+    if($millwright1 == $millwright2 && $millwright1 != $millwright3) {
+        $millwright2 = $millwright3;
+        $millwright3 = 0;
+    }
+    if($millwright1 == $millwright3 && $millwright1 != $millwright2) {
+        $millwright3 = 0;
+    }
+    if($millwright2 == $millwright3 && $millwright1 != $millwright2) {
+        $millwright3 = 0;
+    }
+    if($millwright2 == $millwright3 && $millwright2 == $millwright1) {
+        $millwright2 = 0;
+        $millwright3 = 0;
+    }
     UnionDB::connectDb();
     $query = mysql_query("SELECT category FROM category WHERE category_id = '$category_id'");
     $result = mysql_fetch_assoc($query);
@@ -39,11 +54,15 @@ if(isset($_GET['id']))
     $result = mysql_fetch_assoc($query);
     $executor = $result['staff_group'];
 
-    $query = mysql_query("SELECT category_id, staff_group_id FROM tickets WHERE id = '$item_id'");
+    $query = mysql_query("SELECT category_id, staff_group_id, location_id, phone, status_id, time_date FROM tickets WHERE id = '$item_id'");
     $result = mysql_fetch_assoc($query);
 
+    $db_location_id = $result['location_id'];
     $db_category_id = $result['category_id'];
     $db_staff_group_id = $result['staff_group_id'];
+    $db_status_id = $result['status_id'];
+    $db_phone = $result['phone'];
+    $db_time_date = $result['time_date'];
 
     $query = mysql_query("SELECT millwright_1, millwright_2, millwright_3 FROM tickets WHERE id = '$item_id'");
     $result = mysql_fetch_assoc($query);
@@ -66,7 +85,10 @@ if(isset($_GET['id']))
         $result = mysql_fetch_assoc($query);
         $c_millwright3 = $result['staff_name'];
 
-        mysql_query("INSERT INTO comments VALUES ('$item_id', '$now_date', '$staff_id', 'Монтажники: $c_millwright1 $c_millwright2 $c_millwright3', '1')");
+        if($millwright1 != $db_millwright1 || $millwright2 != $db_millwright2 || $millwright3 != $db_millwright3)
+        {
+            mysql_query("INSERT INTO comments VALUES ('$item_id', '$now_date', '$staff_id', 'Монтажники: $c_millwright1 $c_millwright2 $c_millwright3', '1')");
+        }
     }
 
     if($db_category_id !== $category_id)
@@ -78,15 +100,43 @@ if(isset($_GET['id']))
         else mysql_query("INSERT INTO comments VALUES ('$item_id','$now_date','$staff_id','Категория: $category.','1')");
     } elseif($db_staff_group_id !== $executor_id) mysql_query("INSERT INTO comments VALUES ('$item_id','$now_date','$staff_id','Исполнитель: $executor.','1')");
 
-    if($status_id == 2) {
+    if($db_status_id != $status_id)
+    {
+        $query = mysql_query("SELECT status FROM status WHERE status_id = '$status_id'");
+        $result = mysql_fetch_assoc($query);
+        $c_status = $result['status'];
 
-        $query = mysql_query("UPDATE tickets SET time_date = '$time_date', category_id = '$category_id', staff_group_id = '$executor_id', house = '$house', driveway = '$driveway', floor = '$floor', flat = '$flat', phone = '$phone', comment = '$comment', millwright_1 = '$millwright1', millwright_2 = '$millwright2', millwright_3 = '$millwright3' WHERE id = '$item_id'");
-        header("Location: {$local}/?page=close&id={$item_id}");
+        mysql_query("INSERT INTO comments VALUES ('$item_id', '$now_date', '$staff_id', 'Произошла смена статуса на \"$c_status\".', '1')");
     }
 
+    if($db_location_id != $location)
+    {
+        $query = mysql_query("SELECT location FROM location WHERE location_id = '$db_location_id'");
+        $result = mysql_fetch_assoc($query);
+        $c_location = $result['location'];
+
+        mysql_query("INSERT INTO comments VALUES ('$item_id', '$now_date', '$staff_id', 'Произошла смена сегмента. Предыдущий сегмент: \"$c_location\".', '1')");
+    }
+
+    if($db_phone != $phone)
+    {
+        mysql_query("INSERT INTO comments VALUES ('$item_id', '$now_date', '$staff_id', 'Изменились контактные данные. Предыдущий телефон: $db_phone.', '1')");
+    }
+
+    if($db_time_date != $time_date)
+    {
+        mysql_query("INSERT INTO comments VALUES ('$item_id', '$now_date', '$staff_id', 'Сменилась дата на: $time_date.', '1')");
+    }
+
+    if($status_id == 2 && $db_status_id != $status_id) {
+        $query = mysql_query("UPDATE tickets SET time_date = '$time_date', category_id = '$category_id', staff_group_id = '$executor_id', location_id = '$location', house = '$house', driveway = '$driveway', floor = '$floor', flat = '$flat', phone = '$phone', comment = '$comment', millwright_1 = '$millwright1', millwright_2 = '$millwright2', millwright_3 = '$millwright3' WHERE id = '$item_id'");
+        header("Location: {$local}/?page=close&id={$item_id}");
+    }
     else {
-        $query = mysql_query("UPDATE tickets SET time_date = '$time_date', status_id = '$status_id', category_id = '$category_id', staff_group_id = '$executor_id', house = '$house', driveway = '$driveway', floor = '$floor', flat = '$flat', phone = '$phone', comment = '$comment', millwright_1 = '$millwright1', millwright_2 = '$millwright2', millwright_3 = '$millwright3' WHERE id = '$item_id'");
+        $query = mysql_query("UPDATE tickets SET time_date = '$time_date', status_id = '$status_id', category_id = '$category_id', staff_group_id = '$executor_id', location_id = '$location', house = '$house', driveway = '$driveway', floor = '$floor', flat = '$flat', phone = '$phone', comment = '$comment', millwright_1 = '$millwright1', millwright_2 = '$millwright2', millwright_3 = '$millwright3' WHERE id = '$item_id'");
+        setcookie("status", 'success', time() + 1, "/");
         header("Location: {$local}/?page=detail&id={$item_id}");
     }
 }
-else echo "<div class='alert'>Идентификатор не передан !</div>";
+else header("Location: $local/pages/502.html");
+

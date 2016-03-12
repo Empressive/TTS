@@ -8,13 +8,13 @@ if (isset($_POST['id'])) {
 
     echo "<table width='100%' style='table-layout: fixed; text-align: center; overflow: hidden;' border='1'>";
     echo "<tr>";
-    echo "<th width='6%'>Номер заявки</th>";
-    echo "<th width='5%'>Договор</th>";
-    echo "<th width='10%'>Телефон</th>";
-    echo "<th width='8%'>IP адрес</th>";
+    echo "<th width='10%'>Номер заявки</th>";
+    echo "<th width='9%'>Договор</th>";
+    echo "<th width='14%'>Телефон</th>";
+    echo "<th width='12%'>IP адрес</th>";
     echo "<th width='15%'>Адрес<table style='text-align: center; table-layout: fixed;' width='100%'><tr><td>дом</td><td>под.</td><td>эт.</td><td>кв.</td></tr></table></th>";
-    echo "<th width='28%'>Текст заявки</th>";
-    echo "<th width='28%'>Комментарии</th>";
+    echo "<th width='20%'>Текст заявки</th>";
+    echo "<th width='20%'>Комментарии</th>";
     echo "<tr>";
 
     UnionDB::connectDb();
@@ -59,6 +59,10 @@ if (isset($_POST['id'])) {
 
     echo "</table>";
 }
-else if(include_once('config.php')) header("Location: {$local}");
+else {
+    include_once('config.php');
+
+    header("Location: $local/pages/502.html");
+}
 ?>
 </html>

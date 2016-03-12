@@ -1,6 +1,6 @@
 <?php include_once('library/UnionDB.php'); ?>
 <form method="post" action="../scripts/add.php">
-    <table class="add_table">
+    <table class="add_table" border='1'>
         <tr>
             <th colspan="2">Информация о заявке</th>
         </tr>
@@ -12,7 +12,7 @@
         </tr>
         <tr>
             <td>Номер договора:</td>
-            <td><input type="text" name="agreement"></td>
+            <td><input type="text" name="agreement" pattern="^[0-9]+[^0-9]*[0-9]*$"></td>
         </tr>
         <tr>
             <td>IP адрес:</td>

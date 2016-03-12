@@ -8,7 +8,10 @@ if (isset($_GET['page']) && isset($_GET['id']) && $_GET['id'] != null) {
 
     UnionDB::connectDb();
 
-    $query = mysql_query("SELECT time_date, now_date, status, status_id, category, category_id, staff_name, staff_group, staff_group_id, ip_adress, user_name, location, house, driveway, floor, flat, phone, comment, agreement FROM tickets INNER JOIN status USING(status_id) INNER JOIN category USING(category_id) INNER JOIN staff_name USING(staff_name_id) INNER JOIN staff_group USING(staff_group_id) INNER JOIN location USING(location_id) WHERE id = {$item_id}");
+    $query = mysql_query("SELECT time_date, now_date, status, status_id, category, category_id, staff_name, staff_group, staff_group_id, ip_adress, user_name, location, location_id, house, driveway, floor, flat, phone, comment, agreement FROM tickets INNER JOIN status USING(status_id) INNER JOIN category USING(category_id) INNER JOIN staff_name USING(staff_name_id) INNER JOIN staff_group USING(staff_group_id) INNER JOIN location USING(location_id) WHERE id = {$item_id}");
+
+    if(mysql_num_rows($query) < 1) header("Location: $local/pages/502.html");
+
     $result = mysql_fetch_assoc($query);
 
     $status = $result['status'];
@@ -20,15 +23,24 @@ if (isset($_GET['page']) && isset($_GET['id']) && $_GET['id'] != null) {
     $staff_group = $result['staff_group'];
     $staff_group_id = $result['staff_group_id'];
 
+    $location = $result['location'];
+    $location_id = $result['location_id'];
+
     $comment = $result['comment'];
 
     if ($result['status_id'] == 1 || $result['status_id'] == 2) {
         $disable = 'disabled';
     }
-
+    if($this->user_access > 2) $disable = '';
 } else header("Location: $local");
 
-echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
+echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>";
+
+if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
+{
+    echo "<script type='text/javascript' src='../js/detail.js'></script>";
+    echo "<input type='text' id='success' value='1' hidden>";
+}
 ?>
 <table width="30%" align="left" border="1">
     <tr>
@@ -103,7 +115,11 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
     </tr>
     <tr>
         <td>Населенный пункт</td>
-        <td><?php echo $result['location']; ?></td>
+        <?php
+        echo "<td><select $disable name='location'><option selected value='$location_id'>$location</option>";
+        UnionDB::select(location,location,location_id,"WHERE location_id != $location_id",'location');
+        echo "</select></td>";
+        ?>
     </tr>
     <tr>
         <td>Дом:</td>
@@ -123,19 +139,19 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
     </tr>
     <tr>
         <td>Телефон:</td>
-        <td><input <?php echo $disable ?> type="text" value="<?php echo $result['phone']; ?>" name="phone" id="phone"></td>
+        <td><input <?php echo $disable ?> type="text" value="<?php echo $result['phone']; ?>" name="phone" id="phone" required></td>
     </tr>
     <?php
     if ($this->user_access >= 2) {
         echo "<tr><td colspan='2' bgcolor='#339999' class='td_color'>Монтажники</td></tr>";
         #Первый селект монтажника
-        $query = mysql_query("SELECT staff_name, millwright_1 FROM tickets, millwright WHERE millwright_id = millwright_1 AND id = {$item_id} ORDER  BY staff_name ASC");
+        $query = mysql_query("SELECT staff_name, millwright_1 FROM tickets, millwright WHERE millwright_id = millwright_1 AND id = {$item_id} ORDER BY staff_name ASC");
         if (mysql_num_rows($query) > 0) {
             $result = mysql_fetch_assoc($query);
             $name = $result['staff_name'];
             $value = $result['millwright_1'];
-            echo "<tr><td colspan='2'><select $disable class='millwright' name='millwright1'><option value='$value'>$name</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value ORDER  BY staff_name ASC");
+            echo "<tr><td colspan='2'><select $disable class='millwright' id='millwright1' name='millwright1'><option value='$value'>$name</option>";
+            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value and millwright_status_id !=2 ORDER BY staff_name ASC");
             while ($result = mysql_fetch_assoc($query)) {
                 $name = $result['staff_name'];
                 $value = $result['millwright_id'];
@@ -143,8 +159,8 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
             }
             echo "</select></td></tr>";
         } else {
-            echo "<tr><td colspan='2'><select $disable class='millwright' name='millwright1'><option value='0'>Выберите монтажника</option>";
-            $query = mysql_query("SELECT * FROM millwright ORDER  BY staff_name ASC");
+            echo "<tr><td colspan='2'><select $disable class='millwright' id='millwright1' name='millwright1'><option value='0'>Выберите монтажника</option>";
+            $query = mysql_query("SELECT * FROM millwright WHERE millwright_status_id !=2 ORDER  BY staff_name ASC");
             while ($result = mysql_fetch_assoc($query)) {
                 $name = $result['staff_name'];
                 $value = $result['millwright_id'];
@@ -159,7 +175,7 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
             $name = $result['staff_name'];
             $value = $result['millwright_2'];
             echo "<tr><td colspan='2' id='millwright2'><select $disable class='millwright' name='millwright2'><option value='$value'>$name</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value ORDER  BY staff_name ASC");
+            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value and millwright_status_id !=2 ORDER BY staff_name ASC");
             while ($result = mysql_fetch_assoc($query)) {
                 $name = $result['staff_name'];
                 $value = $result['millwright_id'];
@@ -168,7 +184,7 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
             echo "</select></td></tr>";
         } else {
             echo "<tr><td colspan='2' style='display: none' id='millwright2'><select $disable class='millwright' name='millwright2'><option value='0'>Выберите монтажника</option>";
-            $query = mysql_query("SELECT * FROM millwright ORDER  BY staff_name ASC");
+            $query = mysql_query("SELECT * FROM millwright WHERE millwright_status_id !=2 ORDER  BY staff_name ASC");
             while ($result = mysql_fetch_assoc($query)) {
                 $name = $result['staff_name'];
                 $value = $result['millwright_id'];
@@ -177,13 +193,13 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
             echo "</select></td></tr>";
         }
         #Третий селект монтажника
-        $query = mysql_query("SELECT staff_name, millwright_3 FROM tickets, millwright WHERE millwright_id = millwright_3 AND id = {$item_id} ORDER  BY staff_name ASC");
+        $query = mysql_query("SELECT staff_name, millwright_3 FROM tickets, millwright WHERE millwright_id = millwright_3 AND id = {$item_id} ORDER BY staff_name ASC");
         if (mysql_num_rows($query) > 0) {
             $result = mysql_fetch_assoc($query);
             $name = $result['staff_name'];
             $value = $result['millwright_3'];
             echo "<tr><td colspan='2' id='millwright3'><select $disable class='millwright' name='millwright3'><option value='$value'>$name</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value ORDER  BY staff_name ASC");
+            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value and millwright_status_id !=2 ORDER  BY staff_name ASC");
             while ($result = mysql_fetch_assoc($query)) {
                 $name = $result['staff_name'];
                 $value = $result['millwright_id'];
@@ -192,7 +208,7 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
             echo "</select></td></tr>";
         } else {
             echo "<tr><td style='display: none' id='millwright3' colspan='2'><select $disable class='millwright' name='millwright3'><option value='0'>Выберите монтажника</option>";
-            $query = mysql_query("SELECT * FROM millwright ORDER  BY staff_name ASC");
+            $query = mysql_query("SELECT * FROM millwright WHERE millwright_status_id !=2 ORDER  BY staff_name ASC");
             while ($result = mysql_fetch_assoc($query)) {
                 $name = $result['staff_name'];
                 $value = $result['millwright_id'];
@@ -201,7 +217,7 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
             echo "</select></td></tr>";
         }
     } else {
-        $query = mysql_query("SELECT staff_name, millwright_id FROM tickets, millwright WHERE millwright_id = millwright_1 AND id = {$item_id} ORDER  BY staff_name ASC");
+        $query = mysql_query("SELECT staff_name, millwright_id FROM tickets, millwright WHERE millwright_id = millwright_1 AND id = {$item_id} ORDER BY staff_name ASC");
         if (mysql_num_rows($query) > 0) {
             $result = mysql_fetch_assoc($query);
             $millwright = $result['staff_name'];
@@ -250,7 +266,7 @@ echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>"
     </tr>
     <?php UnionDB::comment("WHERE comment_id = $item_id and comment_type_id != 3") ?>
     <tr>
-        <td bgcolor="#339999" colspan="3" class="td_color">Форма отправки комментариев</td>
+        <td bgcolor="#339999" colspan="3" class="td_color">Комментарий</td>
     </tr>
     <tr>
         <td colspan="3"><textarea <?php echo $disable ?> name="comment2" class="textarea_detail_fix" required></textarea></td>

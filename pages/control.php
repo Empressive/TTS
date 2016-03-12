@@ -9,7 +9,7 @@ if (include('config.php')) {
 
             $name = htmlspecialchars(trim($_GET['mode']));
 
-            if($name == 'location' || $name == 'staff_group' || $name == 'status' || $name == 'category' || $name == 'reason' || $name == 'millwright') {
+            if($name == 'location' || $name == 'staff_group' || $name == 'status' || $name == 'category' || $name == 'reason') {
                 if ($name == 'location') {
                     $label = 'сегмент';
                 } elseif ($name == 'staff_group') {
@@ -21,53 +21,19 @@ if (include('config.php')) {
                 } elseif ($name == 'reason') {
                     $label = 'причину';
                 }
-                elseif ($name == 'millwright') {
-                    $label = 'Ф.И.О монтажника';
-                }
             }else $hide = 'hidden';
         } elseif(!isset($_GET['mode'])) $hide = 'hidden';
-    } else header("Location: $local");
+    } else header("Location: $local/pages/403.html");
 }
 ?>
-<div class="control_admin">
-    <div class="control">
-        <ul class='control'>
-            <li class='control'><a href='?page=announcement'>Добавить оповещение</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=user'>Добавить пользователя</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=password'>Редактировать пароль</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=announce'>Управление оповещениями</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=control&mode=location'>Добавить сегмент</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=control&mode=staff_group'>Добавить исполнителя</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=control&mode=status'>Добавить статус заявки</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=control&mode=category'>Добавить категорию заявки</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=control&mode=reason'>Добавить причину закрытия заявки</a></li>
-        </ul>
-        <ul class='control'>
-            <li class='control'><a href='?page=control&mode=millwright'>Добавить Ф.И.О монтажника</a></li>
-        </ul>
-    </div>
-</div>
-<?php echo "<div $hide class='union'>";
-echo "<form action='../scripts/union.php?name=$name' method='post'>"; ?>
+<?php
+echo "<div $hide class='union'>";
+
+echo "<form action='../scripts/union.php?name=$name' method='post'>";
+?>
 <table border="1" class="union_table">
     <tr>
-        <th colspan="2">Форма добавления данных в базу</th>
+        <th colspan="2">Добавление данных в базу</th>
     </tr>
     <tr>
         <td align='right' width='50%'><?php echo "Введите $label:" ?></td>
@@ -84,3 +50,12 @@ echo "<form action='../scripts/union.php?name=$name' method='post'>"; ?>
 </table>
 </form>
 </div>
+<?php
+if(isset($_GET['mode']) && $_GET['mode'] == 'add')
+{
+  echo "<table class='union' border='1'>";
+  echo "<tr><th colspan='2'>Добавление данных в базу</th></tr>";
+  echo "<tr><td colspan='2'><select onchange=\"location = this.options[this.selectedIndex].value;\"><option disabled selected>Выберите тип данных</option><option value='?page=control&mode=location'>Сегмент</option><option value='?page=control&mode=staff_group'>Исполнителя</option><option value='?page=control&mode=status'>Статус</option><option value='?page=control&mode=category'>Категорию</option><option value='?page=control&mode=reason'>Причину</option></select></td></tr>";
+  echo "</table>";
+}
+?>

@@ -8,13 +8,13 @@ if (include('config.php'))
     {
         $access = $this->user_access;
 
-        if($access < 3) header("Location: $local");
+        if($access < 3) header("Location: $local/pages/403.html");
     }
 }
 ?>
 <form action="scripts/user.php" method="post">
     <table class="user_table">
-        <tr><th colspan="2">Форма добавления сотрудников в базу</th></tr>
+        <tr><th colspan="2">Добавление сотрудников в базу</th></tr>
         <tr>
             <td width="50%">Логин пользователя:</td>
             <td width="50%"><input id="user_table" type="text" name="login" required></td>

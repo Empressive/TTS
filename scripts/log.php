@@ -6,7 +6,7 @@ if (isset($_POST['login']) && isset($_POST['passw'])) {
     include('../config.php');
 
     $login = htmlspecialchars(trim($_POST['login']));
-    $passw = md5(md5(htmlspecialchars(trim($_POST['passw']))));
+    $passw = md5(md5(htmlspecialchars(trim($_POST['passw'] . 'secret'))));
     if ((include_once '../library/UnionDB.php')) {
         UnionDB::connectDb();
 

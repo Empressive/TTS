@@ -72,12 +72,12 @@
     margin: 20% auto;
 }
 .union_table {
-    width: 70%;
-    margin: 20px auto;
+    width: 100%;
+    margin: 0 auto;
 }
 .user_table {
     width: 50%;
-    margin: 40px auto;
+    margin: 0 auto;
 }
 #user_table {
     width: 100%;
@@ -86,4 +86,22 @@
 .moder_table {
     width: 70%;
     margin: 200px auto;
+}
+#date_filter {
+    position: absolute;
+    margin: 15px 0 0 25px;
+}
+.announce_block {
+    margin: 0 auto;
+}
+.announce_table {
+    margin: 20px auto;
+    width: 50%;
+}
+#staff_edit:hover {
+    background-color: #66cc66;
+}
+#announce_table {
+    width: 75%;
+    margin: 0 0 0 257px ;
 }

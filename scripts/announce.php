@@ -14,4 +14,3 @@ if (isset($_POST['id']) && $_POST['id'] != null) {
 
     header("Location: $local");
 }
-header("Location: $local");

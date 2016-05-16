@@ -1,7 +1,7 @@
 <?php
 #Добавление заяки в бд
 session_start();
-
+if($_SESSION['user_id'] != 0) {
 include_once('../config.php');
 
 $category = htmlspecialchars(trim($_POST['category']));
@@ -21,12 +21,13 @@ $status = 3;
 $time_date = htmlspecialchars(trim($_POST['time_date']));
 $now_date = date('Y-m-d H:i:s');
 
-include_once('../library/UnionDB.php');
+include_once('../library/MVdb.php');
 
-UnionDB::connectDb();
+MVdb::connect();
 
 $user_id = $_SESSION['user_id'];
 
 mysql_query("INSERT INTO tickets VALUES('', '$category', '$agreement', '$ip', '$username', '$location', '$house', '$driveway', '$floor', '$flat', '$phone', '$comment', '$time_date', '$now_date', '$user_id', '$staff_group_id', '', '', '', '$status', '')");
 header("Location: $local");
-
+}
+else header("location: $local/pages/502.html");

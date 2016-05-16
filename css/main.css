@@ -221,7 +221,7 @@ select {
     background-color: #339999;
     opacity: .9;
     border-radius: 10px;
-    height: 270px;
+    height: 320px;
     box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
 }
 
@@ -291,7 +291,7 @@ select {
     border-bottom: 1px;
 }
 .more_button{
-    margin: 20px 0 0 35%;
+    margin: 20px 0 0 41%;
 }
 .ajax_comment {
     overflow: hidden;

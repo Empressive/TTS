@@ -1,8 +1,8 @@
 <?php
 #Подгрузка дополнительных заявок методом ajax
-include_once('../library/UnionDB.php');
+include_once('../library/MVdb.php');
 
-UnionDB::connectDb();
+MVdb::connect();
 
 $offset = intval($_POST['offset']);
 $limit = intval($_POST['limit']);

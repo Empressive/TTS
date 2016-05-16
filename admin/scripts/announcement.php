@@ -1,15 +1,14 @@
-<html>
-<meta charset="utf-8">
 <?php
+#Добавление оповещений
 session_start();
 
-include_once('../config.php');
+include_once('../../config.php');
 
 if(isset($_POST['comment']) && $_POST['comment'] != null) {
 
-    include_once('../library/UnionDB.php');
+    include_once('../../library/MVdb.php');
 
-    UnionDB::connectDb();
+    MVdb::connect();
 
     $user_id = $_SESSION['user_id'];
     $comment = htmlspecialchars(trim($_POST['comment']));
@@ -21,6 +20,6 @@ if(isset($_POST['comment']) && $_POST['comment'] != null) {
         mysql_query("INSERT INTO announcement VALUES ('', '$user_id', '$now_date', '$comment', '$comment_type_id', '')");
         header("Location: $local");
     } else header("Location: $local/pages/503.html");
-} header("Location: $local");
-?>
-</html>
+}
+header("Location: $local");
+

@@ -1,18 +1,4 @@
-<?php
-#Форма добавления пользователей(сотрудников) в базу
-include_once ('library/UnionDB.php');
-
-if (include('config.php'))
-{
-    if (isset($this->user_access))
-    {
-        $access = $this->user_access;
-
-        if($access < 3) header("Location: $local/pages/403.html");
-    }
-}
-?>
-<form action="scripts/user.php" method="post">
+<form action="/admin/scripts/user.php" method="post">
     <table class="user_table">
         <tr><th colspan="2">Добавление сотрудников в базу</th></tr>
         <tr>
@@ -25,13 +11,13 @@ if (include('config.php'))
         <tr>
             <td width="50%">Группа пользователя:</td>
             <td width="50%"><select id="user_table" name="group">
-                    <?php UnionDB::select(staff_group, staff_group, staff_group_id, 'WHERE staff_group_id != 0 and staff_group_id != 1','staff_group_id') ?>
+                    <?php MVdb::select(staff_group, staff_group, staff_group_id, "WHERE staff_group_id != $all_staff_group and staff_group_id != $archive_staff_group",'staff_group_id') ?>
                 </select></td>
         </tr>
         <tr>
             <td width="50%">Права пользователя:</td>
             <td width="50%"><select id="user_table" name="access">
-                    <?php UnionDB::select(access, access, access_id, '','access_id')?>
+                    <?php MVdb::select(access, access, access_id, '','access_id')?>
                 </select></td>
         </tr>
         <tr>

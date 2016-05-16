@@ -1,12 +1,12 @@
 <?php
-#Обработка данных методом Ajax
+#Обработка данных методом Ajax первых 50 заявок
 session_start();
-if (isset($_POST['limit'])) {
+if(isset($_POST['limit'])) {
 
-    include_once('../library/UnionDB.php');
+    include_once('../library/MVdb.php');
     include_once('../config.php');
 
-    UnionDB::connectDb();
+    MVdb::connect();
 
     $user_id = $_SESSION['user_id'];
 
@@ -43,7 +43,7 @@ if (isset($_POST['limit'])) {
 
     $staff_id = $result['staff_group_id'];
 
-    $staff_rows = mysql_query("SELECT id FROM tickets WHERE status_id != 0 and status_id != 1 and status_id != 2 and  staff_group_id = $staff_id and time_date BETWEEN '0000-00-00' and '$now_date'");
+    $staff_rows = mysql_query("SELECT id FROM tickets WHERE status_id != $all_ticket and status_id != $archive_ticket and status_id != $close_ticket and  staff_group_id = $staff_id and time_date BETWEEN '0000-00-00' and '$now_date'");
 
     $staff_row = mysql_num_rows($staff_rows);
 
@@ -64,37 +64,22 @@ if (isset($_POST['limit'])) {
     echo "<td width='23%' id='td_color'>Комментарий</td>";
     echo "</tr>";
 
-    while ($row = mysql_fetch_assoc($query)) {
-        $id = $row['id']; #id заявки
-        $t_date = $row['time_date']; #Дата выполнения заявки
-        $n_date = $row['now_date']; #Дата получаения заявки
-        $category = $row['category']; #Категория
-        $executor = $row['staff_group']; #Исполнитель
-        $agreement = $row['agreement']; #Номер договора
-        $location = $row['location']; #Сегмент
-        $house = $row['house']; #Дом
-        $driveway = $row['driveway']; #Подъезд
-        $floor = $row['floor']; #Этаж
-        $flat = $row['flat'];  #Квартира
-        $comment = $row['comment']; #Текст заявки
-        $status = $row['status']; #Статус заявки
-
-        if ($status == "Не выполнена") $color = "$default_color";
-        if ($status == "Выполнена") $color = "$close_color";
-        if ($status == "Выполнена частично") $color = "$toch_color";
-        if ($status == "Архив") $color = "$archive_color";
+    while ($result = mysql_fetch_assoc($query)) {
+        if ($result['status'] == "Не выполнена") $color = "$default_color";
+        if ($result['status'] == "Выполнена") $color = "$close_color";
+        if ($result['status'] == "Выполнена частично") $color = "$toch_color";
+        if ($result['status'] == "Архив") $color = "$archive_color";
 
         echo "<tr bgcolor='{$color}'>";
-        echo "<td><input id='checkbox' type='checkbox' name='id[]' value='$id'></td>";
-        echo "<td id='cursor' onclick=\"location.href='?page=detail&id={$id}'\">$id</a></td>";
-        echo "<td>$n_date</td>";
-        echo "<td>$t_date</td>";
-        echo "<td>$category</td>";
-        echo "<td>$executor</td>";
-        echo "<td>$agreement</td>";
-        echo "<td>$location<table class='border' width=100%><tr><td class='border'>$house</td><td class='border'>$driveway</td><td class='border'>$floor</td><td class='border'>$flat</td></tr></table></td>";
-        echo "<td><div class='ajax_comment'>$comment</div></td>";
+        echo "<td><input id='checkbox' type='checkbox' name='id[]' value='{$result['id']}'></td>";
+        echo "<td id='cursor' onclick=\"location.href='/detail/{$result['id']}/'\">{$result['id']}</a></td>";
+        echo "<td>{$result['now_date']}</td>";
+        echo "<td>{$result['time_date']}</td>";
+        echo "<td>{$result['category']}</td>";
+        echo "<td>{$result['staff_group']}</td>";
+        echo "<td>{$result['agreement']}</td>";
+        echo "<td>{$result['location']}<table class='border' width=100%><tr><td class='border'>{$result['house']}</td><td class='border'>{$result['driveway']}</td><td class='border'>{$result['floor']}</td><td class='border'>{$result['flat']}</td></tr></table></td>";
+        echo "<td><div class='ajax_comment'>{$result['comment']}</div></td>";
     }
     echo "</table>";
 }
-else echo "<div class='alert'>Ошибка !</div>";

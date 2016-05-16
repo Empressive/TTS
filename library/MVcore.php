@@ -1,6 +1,6 @@
 <?php
 
-class UnionCore
+class MVcore
 {
     public $user_id = '';
 
@@ -8,19 +8,19 @@ class UnionCore
 
     public $page = "";
 
-    public static function getInstance()
+    public static function gInst()
     {
-        $core = new UnionCore();
-        $core->authUser();
-        $core->loadRequest();
-        $core->includeContent();
+        $core = new MVcore();
+        $core->AUsr();
+        $core->LReq();
+        $core->ICont();
     }
 
-    public function authUser()
+    public function AUsr()
     {
-        include_once('library/UnionDB.php');
+        include_once('library/MVdb.php');
 
-        UnionDB::connectDb();
+        MVdb::connect();
 
         $this->user_id = 0;
 
@@ -53,7 +53,7 @@ class UnionCore
         }
     }
 
-    public function loadRequest()
+    public function LReq()
     {
         if ($this->user_id !== 0 && $this->user_access > 0) {
             if ($_GET['page']) {
@@ -74,20 +74,11 @@ class UnionCore
         } else $this->page = "pages/log.php";
     }
 
-    public function includeContent()
+    public function ICont()
     {
         session_start();
 
         include_once('include/header.php');
-
-        if ($this->user_access == 3) {
-            if (($_GET['page'] == 'control') || ($_GET['page'] == 'user') || ($_GET['page'] == 'announcement') || ($_GET['page'] == 'edit') || ($_GET['page'] == 'millwright') || ($_GET['page'] == 'announce')) include_once('include/control.php');
-        }
-
-        if ($this->user_access == 2) {
-            if (($_GET['page'] == 'moder') || ($_GET['page'] == 'announcement') || ($_GET['page'] == 'announce') && $this->user_access == 2) include_once('include/moder.php');
-        }
-
 
         if (!isset($_GET['page']) && $this->user_id > 0 && $this->user_access > 0) include_once('include/announce.php');
 

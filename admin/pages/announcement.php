@@ -1,14 +1,5 @@
-<?php
-
-if (include('config.php')) {
-    if (isset($this->user_access)) {
-        $access = $this->user_access;
-        if ($access < 2) header("Location: $local");
-    }
-}
-?>
 <div class="announce_block">
-    <form action="../scripts/announcement.php" method="post">
+    <form action="/admin/scripts/announcement.php" method="post">
         <table class="announce_table">
             <tr>
                 <th colspan="2">Ниже укажите текст вашего оповещения</th>

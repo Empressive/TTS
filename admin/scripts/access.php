@@ -1,8 +1,8 @@
 <?php
 #Изменение сотрудника
-include('../config.php');
+include('../../config.php');
 
-include_once ('../library/UnionDB.php');
+include_once('../../library/MVdb.php');
 
 $id = intval($_POST['user_id']);
 $login = htmlspecialchars(trim($_POST['login']));
@@ -14,7 +14,7 @@ $password = htmlspecialchars(trim($_POST['passw']));
 $password2 = htmlspecialchars(trim($_POST['passw2']));
 
 
-UnionDB::connectDb();
+MVdb::connect();
 
 $query = mysql_query("UPDATE staff_login SET login = '$login', staff_name = '$user', staff_group_id = '$staff_group', access_id = '$access' WHERE id = {$id}");
 
@@ -29,4 +29,4 @@ if(isset($password) && isset($password2) && $password != null)
 
 }
 
-header("Location: $local?page=edit&id={$id}");
+header("Location: $local/admin/edit/{$id}/");

@@ -18,8 +18,8 @@ $(function () {
     var i;
     var Progress = false;
 
-    function Ajax() {
-        limit = 50;
+    function ajax() {
+        limit = 50;     
         var condition = document.getElementById('status').value;
         var agreement = document.getElementById('agreement').value;
         var category = document.getElementById('category').value;
@@ -28,7 +28,7 @@ $(function () {
         var staffGroup = document.getElementById('staffGroup').value;
 
         $.ajax({
-            url: 'scripts/ajax.php',
+            url: '/scripts/ajax.php',
             method: 'POST',
             data: {
                 "agreement": agreement,
@@ -43,7 +43,7 @@ $(function () {
                 $('#result').html(response);
             }
         });
-        $('input[id=all]').prop("disabled", false);
+        $('input[id=all]').prop( "disabled", false );
     }
 
     $('button[id=res_button]').on('click', function () {
@@ -53,38 +53,38 @@ $(function () {
         $('input[id=datepicker]').val('');
         $('input[id=end_date]').val('');
         $('input[id=agreement]').val('');
-        Ajax();
+        ajax();
     });
 
     $(document).ready(function () {
-        Ajax();
+        ajax();
         setTimeout(staffrows, 2000);
     });
 
     $('select[name=status]').on('change', function () {
-        Ajax();
+        ajax();
     });
 
     $('select[name=category]').on('change', function () {
         offset = limit;
-        Ajax();
+        ajax();
     });
     $('select[name=staffGroup]').on('change', function () {
         offset = limit;
-        Ajax();
+        ajax();
     });
 
     $('input[name=date]').on('change', function () {
         offset = limit;
-        Ajax();
+        ajax();
     });
     $('input[id=end_date]').on('change', function () {
         offset = limit;
-        Ajax();
+        ajax();
     });
     $('input[name=agreement]').on('change', function () {
         offset = limit;
-        Ajax();
+        ajax();
     });
     $('button[id=date_button]').on('click', function () {
 
@@ -95,7 +95,7 @@ $(function () {
         $('input[id=end_date]').val('');
         $('input[id=agreement]').val('');
 
-        Ajax();
+        ajax();
     });
 
     $('input[id=more]').on('click', function () {
@@ -110,7 +110,7 @@ $(function () {
             var staffGroup = document.getElementById('staffGroup').value;
 
             $.ajax({
-                url: 'scripts/ajax_complete.php',
+                url: '/scripts/ajax_complete.php',
                 method: 'POST',
                 data: {
                     "agreement": agreement,
@@ -133,13 +133,23 @@ $(function () {
                     if (data.status == 'Выполнена частично') i = '#ffff66';
                     if (data.status == 'Архив') i = '#cccccc';
 
-                    var html = "<tr bgcolor='" + i + "'>" + "<td><input id='checkbox' type='checkbox' name='id[]' value='" + data.id + "'></td><td id='cursor' onclick=\"location.href='?page=detail&id=" + data.id + "'\">" + data.id + "</td><td>" + data.now_date + "</td><td>" + data.time_date + "</td><td>" + data.category + "</td><td>" + data.staff_group + "</td><td>" + data.agreement + "</td><td>" + data.location + "<table class='border' width=100%'>" + "<tr><td class='border'>" + data.house + "</td><td class='border'>" + data.driveway + "</td><td class='border'>" + data.floor + "</td><td class='border'>" + data.flat + "</td></tr></table></td><td><div class='ajax_comment'>" + data.comment + "</div></td>";
+                    var html = "<tr bgcolor='" + i + "'>" + "<td><input id='checkbox' type='checkbox' name='id[]' value='" + data.id + "'></td><td id='cursor' onclick=\"location.href='/detail/" + data.id + "/'\">" + data.id + "</td><td>" + data.now_date + "</td><td>" + data.time_date + "</td><td>" + data.category + "</td><td>" + data.staff_group + "</td><td>" + data.agreement + "</td><td>" + data.location + "<table class='border' width=100%'>" + "<tr><td class='border'>" + data.house + "</td><td class='border'>" + data.driveway + "</td><td class='border'>" + data.floor + "</td><td class='border'>" + data.flat + "</td></tr></table></td><td><div class='ajax_comment'>" + data.comment + "</div></td>";
 
                     $("#main_table").append(html);
 
                 });
                 offset += limit;
+                limit = 100;
                 Progress = false;
+
+                noty({
+                    text: "<div class='alert'>Заявки добавлены !<br>Текущее количество на странице:"+offset+"</div>",
+                    textAlign: 'center',
+                    layout: 'topRight',
+                    type: 'success',
+                    closeWith: ['button'],
+                    timeout: '1000'
+                });
             });
         }
     });
@@ -173,16 +183,16 @@ $(function () {
 
             for (count; count < num; count++) {
                 limit = 1000;
-                All();
+                all();
                 offset += limit;
 
-                $('input[id=all]').prop("disabled", true);
+                $('input[id=all]').prop( "disabled", true );
                 $.noty.closeAll();
             }
         }
     });
 
-    function All() {
+    function all() {
         var condition = document.getElementById('status').value;
         var agreement = document.getElementById('agreement').value;
         var category = document.getElementById('category').value;
@@ -192,7 +202,7 @@ $(function () {
 
         $.ajax({
             async: false,
-            url: 'scripts/ajax_complete.php',
+            url: '/scripts/ajax_complete.php',
             method: 'POST',
             data: {
                 "agreement": agreement,
@@ -215,7 +225,7 @@ $(function () {
                 if (data.status == 'Выполнена частично') i = '#ffff66';
                 if (data.status == 'Архив') i = '#cccccc';
 
-                var html = "<tr bgcolor='" + i + "'>" + "<td><input id='checkbox' type='checkbox' name='id[]' value='" + data.id + "'></td><td id='cursor' onclick=\"location.href='?page=detail&id=" + data.id + "'\">" + data.id + "</td><td>" + data.now_date + "</td><td>" + data.time_date + "</td><td>" + data.category + "</td><td>" + data.staff_group + "</td><td>" + data.agreement + "</td><td>" + data.location + "<table class='border' width=100%'>" + "<tr><td class='border'>" + data.house + "</td><td class='border'>" + data.driveway + "</td><td class='border'>" + data.floor + "</td><td class='border'>" + data.flat + "</td></tr></table></td><td><div class='ajax_comment'>" + data.comment + "</div></td>";
+                var html = "<tr bgcolor='" + i + "'>" + "<td><input id='checkbox' type='checkbox' name='id[]' value='" + data.id + "'></td><td id='cursor' onclick=\"location.href='/detail/" + data.id + "/'\">" + data.id + "</td><td>" + data.now_date + "</td><td>" + data.time_date + "</td><td>" + data.category + "</td><td>" + data.staff_group + "</td><td>" + data.agreement + "</td><td>" + data.location + "<table class='border' width=100%'>" + "<tr><td class='border'>" + data.house + "</td><td class='border'>" + data.driveway + "</td><td class='border'>" + data.floor + "</td><td class='border'>" + data.flat + "</td></tr></table></td><td><div class='ajax_comment'>" + data.comment + "</div></td>";
 
                 $("#main_table").append(html);
             });
@@ -236,9 +246,10 @@ $(function () {
 
         if (n > 0) {
             noty({
-                text: "<div class='alert' onclick=\"window.open('?page=alert')\">Не закрытых заявок в вашем отделе - " + n + " !<br></div>",
+                text: "<div class='alert' onclick=\"window.open('/alert/')\">Не закрытых заявок в вашем отделе - " + n + " !<br></div>",
                 textAlign: 'center',
                 layout: 'topRight',
+                timeout: '2000',
                 type: typ,
                 modal: mod,
                 closeWith: ['button']
@@ -311,7 +322,7 @@ $(function () {
         item.style.display = 'none';
 
         $.ajax({
-            url: 'scripts/cookie.php',
+            url: '/scripts/cookie.php',
             method: 'POST',
             data: {
                 "cookie": id
@@ -327,10 +338,12 @@ $(function () {
         var col2 = document.getElementById('date_col2');
 
         if (col.style.display != 'block') {
+            document.getElementById("old_date").textContent="Нач. дата";
             col.style.display = 'block';
             col2.style.display = 'block';
         }
         else {
+            document.getElementById("old_date").textContent="Дата";
             col.style.display = 'none';
             col2.style.display = 'none';
         }
@@ -346,7 +359,7 @@ $(function () {
         var end_date = document.getElementById('end_date').value;
 
         $.ajax({
-            url: 'scripts/stats.php',
+            url: '/scripts/stats.php',
             method: 'POST',
             data: {
                 "location": location,

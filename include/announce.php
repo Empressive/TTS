@@ -1,8 +1,4 @@
 <?php
-include_once('config.php');
-include_once('library/UnionDB.php');
-
-UnionDB::connectDb();
 
 $announce1 = $_COOKIE['announce1'];
 
@@ -31,13 +27,10 @@ elseif(!isset($announce1) && !isset($announce2) && !isset($announce3))
 
 if (mysql_num_rows($query) > 0) {
 
-    while($resault = mysql_fetch_assoc($query))
+    while($result = mysql_fetch_assoc($query))
     {
-        $comment = $resault['comment'];
-        $comment_id = $resault['comment_id'];
-
-        echo "<table border='1' class='announce' id='$comment_id'>";
-        echo "<tr><td bgcolor='#ffff66' width='100%'>$comment</td></tr>";
+        echo "<table border='1' class='announce' id='{$result['comment_id']}'>";
+        echo "<tr><td bgcolor='#ffff66' width='100%'>{$result['comment']}</td></tr>";
         echo "</table>";
     }
 }

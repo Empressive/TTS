@@ -1,5 +1,4 @@
-<?php include_once('library/UnionDB.php'); ?>
-<form method="post" action="../scripts/add.php">
+<form method="post" action="/scripts/add.php">
     <table class="add_table" border='1'>
         <tr>
             <th colspan="2">Информация о заявке</th>
@@ -7,12 +6,12 @@
         <tr>
             <td class="label">Категория заявки:</td>
             <td class="value"><select
-                    name="category"><?php UnionDB::select(category, category, category_id, 'WHERE category_id !=0', 'category_id') ?></select>
+                    name="category"><?php MVdb::select(category, category, category_id, 'WHERE category_id !=0', 'category_id') ?></select>
             </td>
         </tr>
         <tr>
             <td>Номер договора:</td>
-            <td><input type="text" name="agreement" pattern="^[0-9]+[^0-9]*[0-9]*$"></td>
+            <td><input type="text" name="agreement" pattern="^[0-9]+[^0-9]*[0-9]*$" maxlength="8"></td>
         </tr>
         <tr>
             <td>IP адрес:</td>
@@ -25,7 +24,7 @@
         <tr>
             <td class="label">Населенный пункт:</td>
             <td><select
-                    name="location"><?php UnionDB::select(location, location, location_id, '', 'location') ?></select>
+                    name="location"><?php MVdb::select(location, location, location_id, '', 'location') ?></select>
             </td>
         </tr>
         <tr>
@@ -51,7 +50,7 @@
         <tr>
             <td class="label">Исполнитель:</td>
             <td><select
-                    name="executor"><?php UnionDB::select(staff_group, staff_group, staff_group_id, 'WHERE staff_group_id !=0 and staff_group_id !=1', 'staff_group_id') ?></select>
+                    name="executor"><?php MVdb::select(staff_group, staff_group, staff_group_id, 'WHERE staff_group_id !=0 and staff_group_id !=1', 'staff_group_id') ?></select>
             </td>
         </tr>
         <tr>

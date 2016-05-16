@@ -1,6 +1,6 @@
 <?php
-
-include_once('../library/UnionDB.php');
+#Страница статистики
+include_once('../library/MVdb.php');
 include_once('../config.php');
 
 $location = $_POST['location'];
@@ -20,18 +20,18 @@ if($location < 1)
     $location = "ANY(SELECT location_id FROM tickets)";
 }
 
-UnionDB::connectDb();
+MVdb::connect();
 
-$query = mysql_query("SELECT id FROM tickets WHERE location_id = {$location} and category_id = '$category' $time and status_id !=1");
+$query = mysql_query("SELECT id FROM tickets WHERE location_id = {$location} and category_id = '$category' $time and status_id != $archive_ticket");
 $all = mysql_num_rows($query);
 
-$query = mysql_query("SELECT id FROM tickets WHERE location_id = {$location} and category_id = '$category' $time and status_id = 2");
+$query = mysql_query("SELECT id FROM tickets WHERE location_id = {$location} and category_id = '$category' $time and status_id = $close_ticket");
 $close = mysql_num_rows($query);
 
-$query = mysql_query("SELECT id FROM tickets WHERE location_id = {$location} and category_id = '$category' $time and status_id = 3");
+$query = mysql_query("SELECT id FROM tickets WHERE location_id = {$location} and category_id = '$category' $time and status_id = $open_ticket");
 $other = mysql_num_rows($query);
 
-$query = mysql_query("SELECT id FROM tickets WHERE location_id = {$location} and category_id = '$category' $time and status_id = 4");
+$query = mysql_query("SELECT id FROM tickets WHERE location_id = {$location} and category_id = '$category' $time and status_id = $touch_ticket");
 $touch = mysql_num_rows($query);
 
 $query = mysql_query("SELECT id, time_date, now_date, category, staff_group, location, house, driveway, floor, flat, comment, status FROM tickets INNER JOIN category USING(category_id) INNER JOIN staff_group USING(staff_group_id) INNER JOIN location USING(location_id) INNER JOIN status USING(status_id) WHERE location_id = {$location} and category_id = '$category' $time and status_id = '$status_id'");
@@ -48,30 +48,18 @@ echo "<td width='15%' id='td_color'>Адрес<table class='border' width=100%><
 echo "<td width='23%' id='td_color'>Комментарий</td>";
 echo "</tr>";
 while($result = mysql_fetch_assoc($query)){
-    $id = $result['id'];
-    $now_date = $result['now_date'];
-    $time_date = $result['time_date'];
-    $category = $result['category'];
-    $staff_group = $result['staff_group'];
-    $location = $result['location'];
-    $house = $result['house'];
-    $driveway = $result['driveway'];
-    $floor = $result['floor'];
-    $flat = $result['flat'];
-    $comment = $result['comment'];
-    $status = $result['status'];
 
-    if ($status == "Не выполнена") $color = "$default_color";
-    if ($status == "Выполнена частично") $color = "$toch_color";
-    if ($status == "Выполнена") $color = "$close_color";
+    if ($result['status'] == "Не выполнена") $color = "$default_color";
+    if ($result['status'] == "Выполнена частично") $color = "$toch_color";
+    if ($result['status'] == "Выполнена") $color = "$close_color";
 
     echo "<tr bgcolor='{$color}'>";
-    echo "<td id='cursor' onclick=\"window.open('?page=detail&id={$id}')\">$id</a></td>";
-    echo "<td>$now_date</td>";
-    echo "<td>$time_date</td>";
-    echo "<td>$category</td>";
-    echo "<td>$staff_group</td>";
-    echo "<td>$location<table class='border' width=100%><tr><td class='border'>$house</td><td class='border'>$driveway</td><td class='border'>$floor</td><td class='border'>$flat</td></tr></table></td>";
-    echo "<td>$comment</td>";
+    echo "<td id='cursor' onclick=\"window.open('/detail/{$result['id']}/')\">{$result['id']}</a></td>";
+    echo "<td>{$result['now_date']}</td>";
+    echo "<td>{$result['time_date']}</td>";
+    echo "<td>{$result['category']}</td>";
+    echo "<td>{$result['staff_group']}</td>";
+    echo "<td>{$result['location']}<table class='border' width=100%><tr><td class='border'>{$result['house']}</td><td class='border'>{$result['driveway']}</td><td class='border'>{$result['floor']}</td><td class='border'>{$result['flat']}</td></tr></table></td>";
+    echo "<td>{$result['comment']}</td>";
 }
 echo "</table>";

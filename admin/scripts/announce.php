@@ -1,11 +1,12 @@
 <?php
-include_once('../config.php');
+#Закрытие оповещений
+include_once('../../config.php');
 
 if (isset($_POST['id']) && $_POST['id'] != null) {
 
-    include_once('../library/UnionDB.php');
+    include_once('../../library/MVdb.php');
 
-    UnionDB::connectDb();
+    MVdb::connect();
 
     foreach ($_POST['id'] as $key => $value)
     {
@@ -14,3 +15,4 @@ if (isset($_POST['id']) && $_POST['id'] != null) {
 
     header("Location: $local");
 }
+else header("Location: $local/pages/502.html");

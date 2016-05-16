@@ -7,18 +7,18 @@
         <th>Конечная дата</th>
     </tr>
     <?php
-    include_once ('../library/UnionDB.php');
+    #Страница статистики
 
     echo "<tr><td><select id='location'><option value='0'>Все</option>";
-    UnionDB::select(location,location,location_id,'','location');
+    MVdb::select(location,location,location_id,'','location');
     echo "</select></td>";
 
     echo "<td><select id='status'>";
-    UnionDB::select(status,status,status_id,"WHERE status_id !=0 and status_id !=1",'status_id');
+    MVdb::select(status,status,status_id,"WHERE status_id != $all_ticket and status_id != $archive_ticket",'status_id');
     echo "</select></td>";
 
     echo "<td><select id='category'>";
-    UnionDB::select(category,category,category_id,"WHERE category_id !=0",'category_id');
+    MVdb::select(category,category,category_id,"WHERE category_id != $all_category",'category_id');
     echo "</select></td>";
 
     echo "<td><input required class='input_filter' id='datepicker' name='date' autocomplete='off'></td>";

@@ -7,8 +7,8 @@ if (isset($_POST['login']) && isset($_POST['passw'])) {
 
     $login = htmlspecialchars(trim($_POST['login']));
     $passw = md5(md5(htmlspecialchars(trim($_POST['passw'] . 'secret'))));
-    if ((include_once '../library/UnionDB.php')) {
-        UnionDB::connectDb();
+    if ((include_once '../library/MVdb.php')) {
+        MVdb::connect();
 
         $query = mysql_query("SELECT id, login, token FROM staff_login WHERE login = '$login'");
         $result = mysql_fetch_assoc($query);

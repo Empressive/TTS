@@ -1,44 +1,26 @@
 <?php
-include_once('config.php');
+#Развернутая заявка.
 if (isset($_GET['page']) && isset($_GET['id']) && $_GET['id'] != null) {
 
     $item_id = intval($_GET['id']);
 
-    include_once('library/UnionDB.php');
-
-    UnionDB::connectDb();
-
     $query = mysql_query("SELECT time_date, now_date, status, status_id, category, category_id, staff_name, staff_group, staff_group_id, ip_adress, user_name, location, location_id, house, driveway, floor, flat, phone, comment, agreement FROM tickets INNER JOIN status USING(status_id) INNER JOIN category USING(category_id) INNER JOIN staff_name USING(staff_name_id) INNER JOIN staff_group USING(staff_group_id) INNER JOIN location USING(location_id) WHERE id = {$item_id}");
-
     if(mysql_num_rows($query) < 1) header("Location: $local/pages/502.html");
-
     $result = mysql_fetch_assoc($query);
-
-    $status = $result['status'];
-    $status_id = $result['status_id'];
-
-    $category = $result['category'];
-    $category_id = $result['category_id'];
-
-    $staff_group = $result['staff_group'];
-    $staff_group_id = $result['staff_group_id'];
-
-    $location = $result['location'];
-    $location_id = $result['location_id'];
-
-    $comment = $result['comment'];
+    
+    $agreement = str_replace('/','-',$result['agreement']);
 
     if ($result['status_id'] == 1 || $result['status_id'] == 2) {
         $disable = 'disabled';
     }
-    if($this->user_access > 2) $disable = '';
+    if($this->user_access > 2) $disable = null;
 } else header("Location: $local");
 
-echo "<form action='../scripts/edit.php?id={$item_id}' method='post'>";
+echo "<form action='/scripts/edit.php?id={$item_id}' method='post'>";
 
 if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
 {
-    echo "<script type='text/javascript' src='../js/detail.js'></script>";
+    echo "<script type='text/javascript' src='/js/detail.js'></script>";
     echo "<input type='text' id='success' value='1' hidden>";
 }
 ?>
@@ -48,8 +30,7 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
     </tr>
     <tr>
         <td>Дата выполнения:</td>
-        <td><input <?php echo $disable ?> type="text" id="datepicker" value="<?php echo $result['time_date']; ?>"
-                                          name="time_date"></td>
+        <td><input <?php echo $disable ?> type="text" id="datepicker" value="<?php echo $result['time_date']; ?>" name="time_date"></td>
     </tr>
     <tr>
         <td>Дата поступления:</td>
@@ -61,9 +42,9 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
             <select name="status" <?php echo $disable ?>>
                 <?php
 
-                echo "<option value='$status_id'>$status</option>";
+                echo "<option value='{$result['status_id']}'>{$result['status']}</option>";
 
-                UnionDB::select(status, status, status_id, "WHERE status_id != 0 and status_id != 1 and status_id != $status_id", 'status_id');
+                MVdb::select(status, status, status_id, "WHERE status_id != $all_ticket and status_id != $archive_ticket and status_id != {$result['status_id']}", 'status_id');
 
                 ?>
             </select>
@@ -75,9 +56,9 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
             <select name="category" <?php echo $disable ?>>
                 <?php
 
-                echo "<option value='$category_id'>$category</option>";
+                echo "<option value='{$result['category_id']}'>{$result['category']}</option>";
 
-                UnionDB::select(category, category, category_id, "WHERE category_id != 0 and category_id != $category_id", 'category_id');
+                MVdb::select(category, category, category_id, "WHERE category_id != $all_category and category_id != {$result['category_id']}", 'category_id');
 
                 ?>
             </select>
@@ -93,9 +74,9 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
             <select name="executor" <?php echo $disable ?>>
                 <?php
 
-                echo "<option value='$staff_group_id'>$staff_group</option>";
+                echo "<option value='{$result['staff_group_id']}'>{$result['staff_group']}</option>";
 
-                UnionDB::select(staff_group, staff_group, staff_group_id, "WHERE staff_group_id != 0 and staff_group_id != 1 and staff_group_id != $staff_group_id", 'staff_group_id');
+                MVdb::select(staff_group, staff_group, staff_group_id, "WHERE staff_group_id != $all_staff_group and staff_group_id != $archive_staff_group and staff_group_id != {$result['staff_group_id']}", 'staff_group_id');
 
                 ?>
             </select>
@@ -103,7 +84,7 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
     </tr>
     <tr>
         <td>Номер договора:</td>
-        <td><?php echo "<a class='agreement' href='?page=filter&id={$result['agreement']}' target='_blank'>{$result['agreement']}</a>"; ?></td>
+        <td><?php echo "<a class='agreement' href='/filter/{$agreement}/' target='_blank'>{$result['agreement']}</a>"; ?></td>
     </tr>
     <tr>
         <td>IP адрес:</td>
@@ -116,8 +97,8 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
     <tr>
         <td>Населенный пункт</td>
         <?php
-        echo "<td><select $disable name='location'><option selected value='$location_id'>$location</option>";
-        UnionDB::select(location,location,location_id,"WHERE location_id != $location_id",'location');
+        echo "<td><select $disable name='location'><option selected value='{$result['location_id']}'>{$result['location']}</option>";
+        MVdb::select(location,location,location_id,"WHERE location_id != {$result['location_id']}",'location');
         echo "</select></td>";
         ?>
     </tr>
@@ -145,99 +126,27 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
     if ($this->user_access >= 2) {
         echo "<tr><td colspan='2' bgcolor='#339999' class='td_color'>Монтажники</td></tr>";
         #Первый селект монтажника
-        $query = mysql_query("SELECT staff_name, millwright_1 FROM tickets, millwright WHERE millwright_id = millwright_1 AND id = {$item_id} ORDER BY staff_name ASC");
-        if (mysql_num_rows($query) > 0) {
-            $result = mysql_fetch_assoc($query);
-            $name = $result['staff_name'];
-            $value = $result['millwright_1'];
-            echo "<tr><td colspan='2'><select $disable class='millwright' id='millwright1' name='millwright1'><option value='$value'>$name</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value and millwright_status_id !=2 ORDER BY staff_name ASC");
-            while ($result = mysql_fetch_assoc($query)) {
-                $name = $result['staff_name'];
-                $value = $result['millwright_id'];
-                echo "<option value='$value'>$name</option>";
-            }
-            echo "</select></td></tr>";
-        } else {
-            echo "<tr><td colspan='2'><select $disable class='millwright' id='millwright1' name='millwright1'><option value='0'>Выберите монтажника</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_status_id !=2 ORDER  BY staff_name ASC");
-            while ($result = mysql_fetch_assoc($query)) {
-                $name = $result['staff_name'];
-                $value = $result['millwright_id'];
-                echo "<option value='$value'>$name</option>";
-            }
-            echo "</select></td></tr>";
-        }
+        MVdb::millwright(1, $item_id);
         #Второй селект монтажника
-        $query = mysql_query("SELECT staff_name, millwright_2 FROM tickets, millwright WHERE millwright_id = millwright_2 AND id = {$item_id} ORDER  BY staff_name ASC");
-        if (mysql_num_rows($query) > 0) {
-            $result = mysql_fetch_assoc($query);
-            $name = $result['staff_name'];
-            $value = $result['millwright_2'];
-            echo "<tr><td colspan='2' id='millwright2'><select $disable class='millwright' name='millwright2'><option value='$value'>$name</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value and millwright_status_id !=2 ORDER BY staff_name ASC");
-            while ($result = mysql_fetch_assoc($query)) {
-                $name = $result['staff_name'];
-                $value = $result['millwright_id'];
-                echo "<option value='$value'>$name</option>";
-            }
-            echo "</select></td></tr>";
-        } else {
-            echo "<tr><td colspan='2' style='display: none' id='millwright2'><select $disable class='millwright' name='millwright2'><option value='0'>Выберите монтажника</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_status_id !=2 ORDER  BY staff_name ASC");
-            while ($result = mysql_fetch_assoc($query)) {
-                $name = $result['staff_name'];
-                $value = $result['millwright_id'];
-                echo "<option value='$value'>$name</option>";
-            }
-            echo "</select></td></tr>";
-        }
+        MVdb::millwright(2, $item_id);
         #Третий селект монтажника
-        $query = mysql_query("SELECT staff_name, millwright_3 FROM tickets, millwright WHERE millwright_id = millwright_3 AND id = {$item_id} ORDER BY staff_name ASC");
-        if (mysql_num_rows($query) > 0) {
-            $result = mysql_fetch_assoc($query);
-            $name = $result['staff_name'];
-            $value = $result['millwright_3'];
-            echo "<tr><td colspan='2' id='millwright3'><select $disable class='millwright' name='millwright3'><option value='$value'>$name</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_id != $value and millwright_status_id !=2 ORDER  BY staff_name ASC");
-            while ($result = mysql_fetch_assoc($query)) {
-                $name = $result['staff_name'];
-                $value = $result['millwright_id'];
-                echo "<option value='$value'>$name</option>";
-            }
-            echo "</select></td></tr>";
-        } else {
-            echo "<tr><td style='display: none' id='millwright3' colspan='2'><select $disable class='millwright' name='millwright3'><option value='0'>Выберите монтажника</option>";
-            $query = mysql_query("SELECT * FROM millwright WHERE millwright_status_id !=2 ORDER  BY staff_name ASC");
-            while ($result = mysql_fetch_assoc($query)) {
-                $name = $result['staff_name'];
-                $value = $result['millwright_id'];
-                echo "<option value='$value'>$name</option>";
-            }
-            echo "</select></td></tr>";
-        }
+        MVdb::millwright(3, $item_id);
     } else {
         $query = mysql_query("SELECT staff_name, millwright_id FROM tickets, millwright WHERE millwright_id = millwright_1 AND id = {$item_id} ORDER BY staff_name ASC");
         if (mysql_num_rows($query) > 0) {
             $result = mysql_fetch_assoc($query);
-            $millwright = $result['staff_name'];
-            $value = $result['millwright_id'];
             echo "<tr><td colspan='2' bgcolor='#339999' class='td_color'>Монтажники</td></tr>";
-            echo "<tr><td colspan='2'><select name='millwright1' hidden><option selected value='$value'>$millwright</option></select>$millwright</td></tr>";
+            echo "<tr><td colspan='2'><select name='millwright1' hidden><option selected value='{$result['millwright_id']}'>{$result['staff_name']}</option></select>{$result['staff_name']}</td></tr>";
         }
         $query = mysql_query("SELECT staff_name, millwright_id FROM tickets, millwright WHERE millwright_id = millwright_2 AND id = {$item_id}");
         if (mysql_num_rows($query) > 0) {
             $result = mysql_fetch_assoc($query);
-            $millwright = $result['staff_name'];
-            $value = $result['millwright_id'];
-            echo "<tr><td colspan='2'><select name='millwright2' hidden><option selected value='$value'>$millwright</option></select>$millwright</td></tr>";
+            echo "<tr><td colspan='2'><select name='millwright2' hidden><option selected value='{$result['millwright_id']}'>{$result['staff_name']}</option></select>{$result['staff_name']}</td></tr>";
         }
         $query = mysql_query("SELECT staff_name, millwright_id FROM tickets, millwright WHERE millwright_id = millwright_3 AND id = {$item_id}");
         if (mysql_num_rows($query) > 0) {
             $result = mysql_fetch_assoc($query);
-            $millwright = $result['staff_name'];
-            $value = $result['millwright_id'];
-            echo "<tr><td colspan='2'><select name='millwright3' hidden><option selected value='$value'>$millwright</option></select>$millwright</td></tr>";
+            echo "<tr><td colspan='2'><select name='millwright3' hidden><option selected value='{$result['millwright_id']}'>{$result['staff_name']}</option></select>{$result['staff_name']}</td></tr>";
         }
     }
     ?>
@@ -245,16 +154,14 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
         <td bgcolor="#339999" colspan="2" class="td_color">Текст заявки</td>
     </tr>
     <tr>
-        <td colspan="2"><textarea required <?php echo $disable ?> class="textarea_detail"
-                                                         name="comment1"><?php echo $comment; ?></textarea>
-        </td>
+        <td colspan="2"><textarea required <?php echo $disable ?> class="textarea_detail" name="comment1"><?php echo $result['comment']; ?></textarea></td>
     </tr>
     <tr>
         <td colspan="2"><input <?php echo $disable ?> value="Сохранить" type="submit"></td>
     </tr>
 </table>
 </form>
-<?php echo "<form action='../scripts/comment.php?id={$item_id}' method='post'>" ?>
+<?php echo "<form action='/scripts/comment.php?id={$item_id}' method='post'>" ?>
 <table width="69%" align="right" border="1">
     <tr>
         <th colspan="3">Информация о заявке</th>
@@ -264,7 +171,7 @@ if(isset($_COOKIE['status']) && $_COOKIE['status'] == 'success')
         <td>Сотрудник</td>
         <td>Комментарий</td>
     </tr>
-    <?php UnionDB::comment("WHERE comment_id = $item_id and comment_type_id != 3") ?>
+    <?php MVdb::comment("WHERE comment_id = $item_id and comment_type_id != 3") ?>
     <tr>
         <td bgcolor="#339999" colspan="3" class="td_color">Комментарий</td>
     </tr>

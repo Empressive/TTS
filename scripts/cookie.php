@@ -1,4 +1,5 @@
 <?php
+#Обработка cookie для скрытия оповещений
 if(isset($_POST['cookie']))
 {
     include_once ('../config.php');

@@ -1,6 +1,6 @@
 <?php
 #Добавление сотрудников в бд
-include('../config.php');
+include('../../config.php');
 
 $login = htmlspecialchars(trim($_POST['login']));
 $user = htmlspecialchars(trim($_POST['user']));
@@ -11,9 +11,9 @@ $passw2 = htmlspecialchars(trim($_POST['passw2']));
 
 if($passw == $passw2)
 {
-    include_once ('../library/UnionDB.php');
+    include_once('../../library/MVdb.php');
 
-    UnionDB::connectDb();
+    MVdb::connect();
     mysql_query("SELECT login FROM staff_login WHERE login = '$login'");
 
     if($result = mysql_fetch_assoc($query)) header("Location: $local/pages/502.html");
@@ -25,7 +25,7 @@ if($passw == $passw2)
 
         if($group == 4) mysql_query("INSERT INTO millwright VALUES ('','$user','1')");
 
-        header("Location: $local?page=control");
+        header("Location: $local/admin/");
     }
 } else header("Location: $local/pages/502.html");
 

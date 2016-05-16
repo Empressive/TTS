@@ -1,8 +1,9 @@
 <?php
+#Закрытие заявки
 session_start();
-if(isset($_GET['id']))
+if(isset($_GET['id']) && $_SESSION['user_id'] != 0)
 {
-    include_once('../library/UnionDB.php');
+    include_once('../library/MVdb.php');
     include_once('../config.php');
 
     $staff_name = $_SESSION['user_id'];
@@ -14,7 +15,7 @@ if(isset($_GET['id']))
 
     $now_date = date('Y-m-d H:i:s');
 
-    UnionDB::connectDb();
+    MVdb::connect();
 
     mysql_query("UPDATE tickets SET status_id = '$status', reason_id = '$reason' WHERE id = '$item_id'");
 
@@ -25,6 +26,7 @@ if(isset($_GET['id']))
 
     mysql_query("INSERT INTO comments VALUES ('$item_id','$now_date','$staff_name','Причина закрытия: $reason','1')");
 
-    header("Location: {$local}/?page=detail&status=success&id={$item_id}");
+    setcookie("status", 'success', time() + 1, "/");
+    header("Location: {$local}/detail/{$item_id}/");
 }
 else header("Location: $local/pages/502.html");

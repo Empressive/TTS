@@ -8,7 +8,7 @@ $(document).ready(function () {
             textAlign: "center",
             layout: 'topRight',
             type: 'success',
-            timeout: '1000'
+            timeout: '1500'
         });
     }
 });

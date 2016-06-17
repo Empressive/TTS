@@ -13,7 +13,7 @@ class Controller
 
     private function openDatabaseConnection()
     {
-        $this->db = new mysqli(DB_HOST,DB_USER,DB_PASS,DB_NAME);
+        $this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         $this->db->set_charset('utf8');
     }
 

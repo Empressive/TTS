@@ -5,6 +5,24 @@ $(function () {
         tickets();
     });
 
+    $('select[id=status]').on('change', function () {
+        tickets();
+    });
+
+    $('select[id=category]').on('change', function () {
+        tickets();
+    });
+    $('select[id=staff_group]').on('change', function () {
+        tickets();
+    });
+
+    $('input[id=datepicker]').on('change', function () {
+        tickets();
+    });
+    $('input[id=agreement]').on('change', function () {
+        tickets();
+    });
+
     function tickets() {
         var limit = 50;
         var condition = $('#status').val();
@@ -22,7 +40,7 @@ $(function () {
                 "category": category,
                 "staff_group": staff_group,
                 "status": condition,
-                "limit": limit,
+                "limit": limit
             },
             success: function (response) {
                 $('#result').html(response);

@@ -19,7 +19,7 @@
     <div class='menu' onclick="location.href='<?echo URL ;?>'"><span class='logo'>Intelway</span>
         <ul class='links'>
             <li><a href='<?echo URL ;?>'>Все заявки</a></li>
-            <li><a href='<?echo URL ;?>detail/add/'>Добавить заявку</a></li>
+            <li><a href='<?echo URL ;?>tickets/'>Добавить заявку</a></li>
             <li><a href='<?echo URL ;?>support/'>Обратная связь</a></li>
         </ul>
         <img src='<?echo RESOURCES . 'img/sad.png' ;?>' onclick="location.href='<?echo URL . 'home/out/' ;?>'">

@@ -19,13 +19,16 @@ class Core
 
     private function user_id()
     {
-        if(isset($_SESSION['user_id']) && isset($_SESSION['token']))
+        if(isset($_SESSION['user_id']) && isset($_SESSION['login']))
         {
-            $db = new mysqli(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-            $query = $db->query("SELECT id FROM staff_login WHERE id = '{$_SESSION['user_id']}' and token = '{$_SESSION['token']}'");
+            $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $query = $db->query("SELECT id FROM staff_login WHERE id = '{$_SESSION['user_id']}' and login = '{$_SESSION['login']}'");
 
-            $result = mysqli_fetch_array($query);
-            $this->user_id = $result['id'];
+            if(!empty($result = mysqli_fetch_array($query)))
+            {
+                $this->user_id = $result['id'];
+            }
+            else session_destroy();
         }
     }
     

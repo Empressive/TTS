@@ -182,8 +182,8 @@ input[type=submit]:hover {
     text-shadow: 0 1px 1px #2D2020;
     box-shadow: none;
     font-weight: bold;
-    background-color: #339999;
     opacity: .9;
+    background-color: #339999;
 }
 
 #pointer {
@@ -206,6 +206,48 @@ input[type=submit]:hover {
     margin: 30px auto;
     text-align: center;
 }
+
 .label {
     color: #ff0000;
+}
+
+#support_title {
+    margin: 30px 0 0 0;
+    color: #4b78bb;
+    text-align: center;
+    font-size: 16px;
+}
+
+#support_title2 {
+    margin: 0 0 30px 0;
+    color: #6f7882;
+    text-align: center;
+    font-size: 13px;
+}
+
+#button {
+    margin: 30px auto;
+    text-align: center;
+    display: block;
+}
+
+#support_title textarea, input[name=subject] {
+    width: 450px;
+}
+
+#close {
+    margin: 150px auto;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: #0000FF;
+}
+
+#filter_table {
+    width: 100%;
+    margin: 30px auto;
 }

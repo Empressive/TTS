@@ -11,14 +11,16 @@ class Model
     {
         if (isset($_POST['login']) && isset($_POST['passw'])) {
             $login = htmlspecialchars(trim($_POST['login']));
-            $passw = md5(md5(htmlspecialchars(trim($_POST['passw'])) . 'secret'));
 
-            $query = $this->db->query("SELECT id, token FROM staff_login WHERE login = '$login' and token = '$passw'");
+            $query = $this->db->query("SELECT id, token, login FROM staff_login WHERE login = '$login'");
             if (!empty($result = mysqli_fetch_array($query))) {
-                $_SESSION['user_id'] = $result['id'];
-                $_SESSION['token'] = $result['token'];
+
+                if(password_verify($_POST['passw'],$result['token']))
+                {
+                    $_SESSION['user_id'] = $result['id'];
+                    $_SESSION['login'] = $result['login'];
+                }
             }
-            header('location: ' . URL);
         }
     }
 

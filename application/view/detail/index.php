@@ -1,12 +1,13 @@
-<form>
+<form action='<? echo URL . 'tickets/edit/' . $items['id'] . '/'; ?>' method='post'>
     <script src='<? echo RESOURCES . 'js/detail.js' ?>'></script>
-    <table width="30%" align="left" border="1" id='detail_table'>
+    <table width='30%' align='left' border='1' id='detail_table'>
         <tr>
-            <th colspan="2">Данные по заявке №<? echo $items['id']; ?></th>
+            <th colspan='2'>Данные по заявке №<? echo $items['id']; ?></th>
         </tr>
         <tr>
             <td>Дата выполнения:</td>
-            <td><input value='<? echo $items['time_date']; ?>' id='datepicker' type='text'></td>
+            <td><input value='<? echo $items['time_date'];
+                echo $access; ?>' id='datepicker' type='text' name='time_date'></td>
         </tr>
         <tr>
             <td>Дата поступления:</td>
@@ -57,7 +58,7 @@
         </tr>
         <tr>
             <td>Номер договора:</td>
-            <td><? echo $items['agreement']; ?></td>
+            <td><? echo "<a href='/filter/view/{$items['agreement']}/' target='_blank'>{$items['agreement']}</a>"; ?></td>
         </tr>
         <tr>
             <td>IP адрес:</td>
@@ -65,7 +66,7 @@
         </tr>
         <tr>
             <td>Ф.И.О. клиента:</td>
-            <td><?php echo $items['user_name']; ?></td>
+            <td><? echo $items['user_name']; ?></td>
         </tr>
         <tr>
             <td>Населенный пункт:</td>
@@ -82,39 +83,39 @@
         </tr>
         <tr>
             <td>Дом:</td>
-            <td><input type='text' value='<?php echo $items['house']; ?>'></td>
+            <td><input type='text' <? echo $access; ?> value='<? echo $items['house']; ?>' name='house'></td>
         </tr>
         <tr>
             <td>Подъезд:</td>
-            <td><input type='text' value='<?php echo $items['driveway']; ?>'></td>
+            <td><input type='text' <? echo $access; ?> value='<? echo $items['driveway'];?>' name='driveway'></td>
         </tr>
         <tr>
             <td>Этаж:</td>
-            <td><input type='text' value='<?php echo $items['floor']; ?>'></td>
+            <td><input type='text' <? echo $access; ?> value='<? echo $items['floor']; ?>' name='floor'></td>
         </tr>
         <tr>
             <td>Квартира:</td>
-            <td><input type='text' value='<?php echo $items['flat']; ?>'></td>
+            <td><input type='text' <? echo $access; ?> value='<? echo $items['flat']; ?>' name='flat'></td>
         </tr>
         <tr>
             <td>Телефон:</td>
-            <td><input type='text' id='phone' value='<?php echo $items['phone']; ?>'></td>
+            <td><input type='text' id='phone' <? echo $access; ?> value='<? echo $items['phone']; ?>' name='phone'></td>
         </tr>
         <tr>
             <td colspan='2' id='td_color'>Текст заявки</td>
         </tr>
         <tr>
-            <td colspan='2'><textarea><?php echo $items['comment']; ?></textarea></td>
+            <td colspan='2'><textarea <? echo $access; ?> name='comment' maxlength='500'><? echo $items['comment']; ?></textarea></td>
         </tr>
         <tr>
-            <td colspan='2'><input type='submit' value='Сохранить'></td>
+            <td colspan='2'><input type='submit' value='Сохранить' <? echo $access; ?>></td>
         </tr>
     </table>
 </form>
 <form>
-    <table width="69%" align="right" border="1" id='detail_table2'>
+    <table width='69%' align='right' border='1' id='detail_table2'>
         <tr>
-            <th colspan="3">Информация о заявке</th>
+            <th colspan='3'>Информация о заявке</th>
         </tr>
         <tr>
             <td>Дата</td>
@@ -133,13 +134,13 @@
         }
         ?>
         <tr>
-            <td colspan="3" id="td_color">Комментарий</td>
+            <td colspan='3' id='td_color'>Комментарий</td>
         </tr>
         <tr>
-            <td colspan="3"><textarea <? echo $access; ?> name="comment2" required></textarea></td>
+            <td colspan='3'><textarea <? echo $access; ?> name='comment2' required></textarea></td>
         </tr>
         <tr>
-            <td colspan="3"><input <? echo $access; ?> value="Отправить" type="submit"></td>
+            <td colspan='3'><input <? echo $access; ?> value='Отправить' type='submit'></td>
         </tr>
     </table>
 </form>

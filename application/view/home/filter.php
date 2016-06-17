@@ -29,7 +29,7 @@
             </select>
         </td>
         <td>
-            <input value='<? echo $account['time_date']; ?>' id='datepicker'>
+            <input value='<? echo $account['time_date']; ?>' id='datepicker' type='text'>
         </td>
         <td>
             <select id='staff_group'>

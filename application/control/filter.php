@@ -5,6 +5,7 @@ class Filter extends Controller
     {
         if(!empty($id))
         {
+            $id = str_replace('-', '/', $id);
             $rows = $this->model->rows("SELECT id FROM tickets WHERE agreement = {$id}");
             $tickets = $this->model->select("SELECT * FROM tickets INNER JOIN category using(category_id) INNER JOIN location using(location_id) INNER JOIN staff_group using(staff_group_id) INNER JOIN status using(status_id) WHERE agreement = '{$id}' ORDER BY id DESC limit 50");
             

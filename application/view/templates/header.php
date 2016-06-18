@@ -16,11 +16,11 @@
 </head>
 <body>
 <div class='page'>
-    <div class='menu' onclick="location.href='<?echo URL ;?>'"><span class='logo'>Intelway</span>
+    <div class='menu'><span onclick="location.href='<?echo URL ;?>'" class='logo'>Intelway</span>
         <ul class='links'>
             <li><a href='<?echo URL ;?>'>Все заявки</a></li>
             <li><a href='<?echo URL ;?>tickets/'>Добавить заявку</a></li>
             <li><a href='<?echo URL ;?>support/'>Обратная связь</a></li>
         </ul>
-        <img src='<?echo RESOURCES . 'img/sad.png' ;?>' onclick="location.href='<?echo URL . 'home/out/' ;?>'">
+        <img onclick="location.href='<?echo URL . 'home/out/'?>'" src='<?echo RESOURCES . 'img/sad.png' ?>'>
     </div>

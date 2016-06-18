@@ -13,8 +13,10 @@ class Detail extends Controller
         if ($this->model->rows("SELECT id FROM tickets WHERE id = {$id}") > 0) {
             $items = $this->model->select("SELECT * FROM tickets INNER JOIN category using(category_id) INNER JOIN location using(location_id) INNER JOIN staff_group using(staff_group_id) INNER JOIN status using(status_id) INNER JOIN staff_name USING(staff_name_id) WHERE id = '$id'");
             $access = $this->model->select("SELECT access_id FROM staff_login WHERE id = '{$_SESSION['user_id']}'");
-            if ($access['access_id'] < 3 && $items['status_id'] == 2 || $items['status_id'] == 1) $access = 'disabled';
+            if ($access['access_id'] < 3 && ($items['status_id'] == 2 || $items['status_id'] == 1)) $access = 'disabled';
             else $access = null;
+            
+            $link = str_replace('/', '-', $items['agreement']);
 
             $statuses = $this->model->select("SELECT status, status_id FROM status WHERE status_id != '{$items['status_id']}' and status_id != 0 and status_id != 1");
             $categoryes = $this->model->select("SELECT category, category_id FROM category WHERE category_id != '{$items['category_id']}' and category_id != 0");

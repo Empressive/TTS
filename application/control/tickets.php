@@ -13,6 +13,11 @@ class Tickets extends Controller
         require APP . 'view/templates/footer.php';
     }
 
+    public function take()
+    {
+        $this->model->take();
+    }
+
     public function add()
     {
         if (isset($_POST['category']) && isset($_POST['location']) && isset($_POST['phone']) && isset($_POST['executor']) && isset($_POST['comment'])) {

@@ -15,11 +15,6 @@ class Home extends Controller
         require APP . 'view/templates/footer.php';
     }
 
-    public function take()
-    {
-        $this->model->take();
-    }
-
     public function login()
     {
         require APP . 'view/templates/headlog.php';
@@ -36,5 +31,6 @@ class Home extends Controller
     public function out()
     {
         $this->model->out();
+        header('Location:' . URL);
     }
 }

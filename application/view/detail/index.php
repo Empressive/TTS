@@ -58,7 +58,7 @@
         </tr>
         <tr>
             <td>Номер договора:</td>
-            <td><? echo "<a href='/filter/view/{$items['agreement']}/' target='_blank'>{$items['agreement']}</a>"; ?></td>
+            <td><? echo "<a href='/filter/view/{$link}/' target='_blank'>{$items['agreement']}</a>"; ?></td>
         </tr>
         <tr>
             <td>IP адрес:</td>
@@ -87,7 +87,7 @@
         </tr>
         <tr>
             <td>Подъезд:</td>
-            <td><input type='text' <? echo $access; ?> value='<? echo $items['driveway'];?>' name='driveway'></td>
+            <td><input type='text' <? echo $access; ?> value='<? echo $items['driveway']; ?>' name='driveway'></td>
         </tr>
         <tr>
             <td>Этаж:</td>
@@ -105,7 +105,8 @@
             <td colspan='2' id='td_color'>Текст заявки</td>
         </tr>
         <tr>
-            <td colspan='2'><textarea <? echo $access; ?> name='comment' maxlength='500'><? echo $items['comment']; ?></textarea></td>
+            <td colspan='2'><textarea <? echo $access; ?> name='comment'
+                                                          maxlength='500'><? echo $items['comment']; ?></textarea></td>
         </tr>
         <tr>
             <td colspan='2'><input type='submit' value='Сохранить' <? echo $access; ?>></td>
@@ -126,10 +127,16 @@
         if ($comment_rows > 1) {
             foreach ($comments as $comment) {
                 if ($comment['type_id'] == 1) $color = '#cccccc';
+                if (strripos($comment['comment'], 0x20) === false) {
+                    $comment['comment'] = mb_substr($comment['comment'], 0, 30) . '...';
+                }
                 echo "<tr bgcolor='$color'><td>{$comment['now_date']}</td><td>{$comment['staff_name']}</td><td>{$comment['comment']}</td></t></tr>";
             }
-        } else {
+        } elseif($comments != null && $comment_rows < 2) {
             if ($comments['type_id'] == 1) $color = '#cccccc';
+            if (strripos($comments['comment'], 0x20) === false) {
+                $comments['comment'] = mb_substr($comments['comment'], 0, 30) . '...';
+            }
             echo "<tr bgcolor='$color'><td>{$comments['now_date']}</td><td>{$comments['staff_name']}</td><td>{$comments['comment']}</td></t></tr>";
         }
         ?>

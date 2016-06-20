@@ -52,6 +52,12 @@ class Model
         session_destroy();
     }
 
+    public function error($text)
+    {
+        setcookie('error', $text, time() + 1, '/');
+        header('Location:' . URL . 'warning/');
+    }
+
     public function take()
     {
         if (isset($_POST['agreement']) && isset($_POST['date']) && isset($_POST['category']) && isset($_POST['staff_group']) && isset($_POST['status']) && isset($_POST['limit']) && isset($_POST['offset'])) {

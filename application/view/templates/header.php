@@ -2,6 +2,7 @@
 <head>
     <meta charset='utf-8'>
     <title>Журнал заявок</title>
+    <link rel="shortcut icon" href='<?= RESOURCES . 'img/favicon.png'?>'/>
     <link href='<?= RESOURCES . 'css/jquery-ui.css' ;?>' rel='stylesheet'>
     <link href='<?= RESOURCES . 'css/jquery-ui.min.css' ;?>' rel='stylesheet'>
     <link href='<?= RESOURCES . 'css/jquery-ui.structure.css' ?>' rel='stylesheet'>

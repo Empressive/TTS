@@ -5,11 +5,11 @@
         </tr>
         <tr>
             <td>Логин пользователя</td>
-            <td><input type='text' name='login' required></td>
+            <td><input type='text' name='login' autocomplete='off' required></td>
         </tr>
         <tr>
             <td>Ф.И.О сотрудника</td>
-            <td><input type='text' name='username' required></td>
+            <td><input type='text' name='username' autocomplete='off' required></td>
         </tr>
         <tr>
             <td>Группа пользователя</td>

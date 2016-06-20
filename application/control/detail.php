@@ -34,20 +34,19 @@ class Detail extends Controller
                 require APP . 'view/detail/comment_log.php';
                 require APP . 'view/templates/footer.php';
             }
-            else header('Location:' . URL);
+            else $this->model->error('Мне кажется, ты пытаешься что-то сломать o_O');
         }
     }
 
     public function close($id)
     {
         if (!empty($id)) {
-            if ($this->model->rows("SELECT id FROM tickets WHERE id = {$id}") > 0) {
+            if ($this->model->rows("SELECT id FROM tickets WHERE id = {$id} and status_id != 1 and status_id != 2") > 0) {
                 $reasons = $this->model->select("SELECT * FROM reason WHERE reason_id != 0");
                 require APP . 'view/templates/header.php';
                 require APP . 'view/detail/close.php';
                 require APP . 'view/templates/footer.php';
-            } else header('Location:' . URL);
-
-        } else header('Location:' . URL);
+            } else $this->model->error('Ну вот, ты опять все сломал !');
+        } else $this->model->error('Мне кажется, ты пытаешься что-то сломать o_O');
     }
 }

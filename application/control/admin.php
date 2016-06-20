@@ -34,17 +34,20 @@ class Admin extends Controller
                     $this->model->insert("INSERT INTO staff_login (login, staff_name, staff_group_id, token, access_id) VALUES ('{$_POST['login']}', '{$_POST['username']}', '{$_POST['staff_group']}', '{$_POST['passw']}', '{$_POST['access']}')");
                     $this->model->insert("INSERT INTO staff_name (staff_name) VALUES ('{$_POST['username']}')");
 
-                    if($_POST['staff_group'] == 4)
-                    {
+                    if ($_POST['staff_group'] == 4) {
                         $this->model->insert("INSERT INTO millwright (staff_name) VALUES ('{$_POST['username']}')");
                     }
 
                     header('Location:' . URL . 'admin/user/');
-                } else header('Location:' . URL . 'admin/user/');
+                } else {
+                    $this->model->error('Пользователь с таким логином уже существует.');
+                }
             } else {
-                header('Location:' . URL . 'admin/');
+                $this->model->error('Пароли не совпадают.');
             }
-        } else header('Location:' . URL . 'admin/user/');
+        } else {
+            $this->model->error('Не передан обязательный идентификатор.');
+        }
     }
 
     public function edit($id)
@@ -94,6 +97,8 @@ class Admin extends Controller
             require APP . 'view/templates/a_header.php';
             require APP . 'view/admin/union/add.php';
             require APP . 'view/templates/footer.php';
+        } else {
+            $this->model->error('Ты пытаешься найти то, чего не нет.');
         }
     }
 
@@ -104,7 +109,9 @@ class Admin extends Controller
                 require APP . 'view/templates/a_header.php';
                 require APP . 'view/admin/union/add.php';
                 require APP . 'view/templates/footer.php';
-            } else header('Location:' . URL . 'admin/union/add/');
+            } else {
+                $this->model->error('Ты пыташься найти то, чего нет.');
+            }
         } elseif (empty($type) && !empty($_POST)) {
             foreach ($_POST as $value => $key) {
                 $_POST[$value] = htmlspecialchars(trim($key));
@@ -114,5 +121,35 @@ class Admin extends Controller
             }
             header('Location:' . URL . 'admin/');
         }
+    }
+
+    public function update($type, $id, $action)
+    {
+        if (!empty($type) && empty($_POST) && empty($action)) {
+            if ($type == 'location' || $type == 'staff_group' || $type == 'reason') {
+                if ($type == 'staff_group') $group = "WHERE staff_group_id != 0 and staff_group_id != 1";
+                else $group = null;
+                if (!empty($id)) {
+                    $type_id = $type . '_id';
+                    $item = $this->model->select("SELECT * FROM {$type} WHERE $type_id = '{$id}'");
+                } else $items = $this->model->select("SELECT * FROM {$type} {$group}");
+                require APP . 'view/templates/a_header.php';
+                require APP . 'view/admin/union/edit.php';
+                require APP . 'view/templates/footer.php';
+            } else {
+                $this->model->error('Ты пытаешься найти то, чего нет.');
+            }
+        } elseif (!empty($type) && !empty($id) && !empty($_POST) && !empty($action)) {
+            $_POST['value'] = htmlspecialchars(trim($_POST['value']));
+            $type_id = $type . '_id';
+
+            if ($action == 'delete') {
+                $this->model->insert("DELETE FROM {$type} WHERE $type_id = '{$id}'");
+                header('Location:' . URL . 'admin/update/' . $type);
+            } elseif ($action == 'update') {
+                $this->model->insert("UPDATE {$type} SET {$type} = '{$_POST['value']}' WHERE $type_id = '{$id}'");
+                header('Location:' . URL . 'admin/update/' . $type);
+            } else $this->model->error('Ты пытаешься найти то, чего нет.');
+        } else header('Location:' . URL . 'admin/');
     }
 }

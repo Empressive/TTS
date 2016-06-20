@@ -2,6 +2,7 @@
 <head>
     <meta charset='utf-8'>
     <title>Журнал заявок</title>
+    <link rel="shortcut icon" href='<?= RESOURCES . 'img/favicon.png'?>'/>
     <link href='<?= RESOURCES . 'css/jquery-ui.css'; ?>' rel='stylesheet'>
     <link href='<?= RESOURCES . 'css/jquery-ui.min.css'; ?>' rel='stylesheet'>
     <link href='<?= RESOURCES . 'css/jquery-ui.structure.css' ?>' rel='stylesheet'>
@@ -18,7 +19,7 @@
 <body>
 <div class='scroll'><span>⯅Наверх</span></div>
 <div class='page'>
-    <div class='navigation'><span onclick="location.href='<?= URL; ?>'" class='logo'>Control Center</span></div>
+    <div class='navigation'><span onclick="location.href='<?= URL; ?>'" class='logo'>TTS Control Center</span></div>
     <div class='menu'>
         <ul>
             <li><a href='<?= URL . 'admin/user/' ?>'>Добавить сотрудника</a></li>

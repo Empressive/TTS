@@ -16,7 +16,7 @@
         </tr>
         <tr>
             <td>Номер договора:</td>
-            <td><input type='text' name='agreement' pattern='^[0-9]+[^0-9]*[0-9]*$' maxlength='8'></td>
+            <td><input type='text' name='agreement' pattern='^[0-9]+[^0-9]*[0-9]*$' autocomplete='off' maxlength='8'></td>
         </tr>
         <tr>
             <td>IP адрес:</td>
@@ -24,7 +24,7 @@
         </tr>
         <tr>
             <td>Ф.И.О. пользователя</td>
-            <td><input type='text' name='username'></td>
+            <td><input type='text' autocomplete='off' name='username'></td>
         </tr>
         <tr>
             <td class='label'>Населенный пункт:</td>
@@ -38,23 +38,23 @@
         </tr>
         <tr>
             <td>Дом:</td>
-            <td><input type='text' name='house' pattern='^[0-9]+[^0-9]*[0-9]*[^0-9]*$'></td>
+            <td><input type='text' name='house' autocomplete='off' pattern='^[0-9]+[^0-9]*[0-9]*[^0-9]*$'></td>
         </tr>
         <tr>
             <td>Подъезд:</td>
-            <td><input type='text' name='driveway' pattern='^[0-9]+[^0-9]*[0-9]*[^0-9]*$'></td>
+            <td><input type='text' name='driveway' autocomplete='off' pattern='^[0-9]+[^0-9]*[0-9]*[^0-9]*$'></td>
         </tr>
         <tr>
             <td>Этаж:</td>
-            <td><input type='text' name='floor' pattern='^[0-9]+[^0-9]*[0-9]*[^0-9]*$'></td>
+            <td><input type='text' name='floor' autocomplete='off' pattern='^[0-9]+[^0-9]*[0-9]*[^0-9]*$'></td>
         </tr>
         <tr>
             <td>Квартира:</td>
-            <td><input type='text' name='flat' pattern='^[0-9]+[^0-9]*[0-9]*[^0-9]*$'></td>
+            <td><input type='text' name='flat' autocomplete='off' pattern='^[0-9]+[^0-9]*[0-9]*[^0-9]*$'></td>
         </tr>
         <tr>
             <td class='label'>Телефон:</td>
-            <td><input type='text' id='phone' name='phone' required></td>
+            <td><input type='text' id='phone' autocomplete='off' name='phone' required></td>
         </tr>
         <tr>
             <td class='label'>Исполнитель:</td>

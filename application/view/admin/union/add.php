@@ -17,7 +17,7 @@
 <? endif; ?>
 <? if (isset($type)) : ?>
     <form action='<?= URL . 'admin/add/' ?>' method='post'>
-        <table class='small_table'>
+        <table class='mid_table'>
             <tr>
                 <th colspan='2'>Добавление <?= $type ?> в базу <input type='text' value='<?= $type ?>' name='type' hidden></th>
             </tr>

@@ -1,5 +1,5 @@
-<script src='<? echo RESOURCES . 'js/detail.js' ?>'></script>
-<form method='post' action='<? echo URL . 'tickets/add/'; ?>'>
+<script src='<?= RESOURCES . 'js/detail.js' ?>'></script>
+<form method='post' action='<?= URL . 'tickets/add/'; ?>'>
     <table class='add_table' border='1'>
         <tr>
             <th colspan='2'>Информация о заявке</th>
@@ -8,11 +8,9 @@
             <td class='label'>Категория заявки:</td>
             <td>
                 <select name='category'>
-                    <?
-                    foreach ($categoryes as $category) {
-                        echo "<option value='{$category['category_id']}'>{$category['category']}</option>";
-                    }
-                    ?>
+                    <? foreach ($categoryes as $category) :?>
+                        <option value='<?=$category['category_id']?>'><?=$category['category']?></option>
+                    <? endforeach; ?>
                 </select>
             </td>
         </tr>
@@ -32,11 +30,9 @@
             <td class='label'>Населенный пункт:</td>
             <td>
                 <select name='location'>
-                    <?
-                    foreach ($locations as $location) {
-                        echo "<option value='{$location['location_id']}'>{$location['location']}</option>";
-                    }
-                    ?>
+                    <? foreach ($locations as $location) : ?>
+                        <option value='<?=$location['location_id']?>'><?=$location['location']?></option>
+                    <? endforeach; ?>
                 </select>
             </td>
         </tr>
@@ -64,11 +60,9 @@
             <td class='label'>Исполнитель:</td>
             <td>
                 <select name='executor'>
-                    <?
-                    foreach ($staff_groups as $staff_group) {
-                        echo "<option value='{$staff_group['staff_group_id']}'>{$staff_group['staff_group']}</option>";
-                    }
-                    ?>
+                    <? foreach ($staff_groups as $staff_group) :?>
+                        <option value='<?=$staff_group['staff_group_id']?>'><?=$staff_group['staff_group']?></option>
+                    <?endforeach;?>
                 </select>
             </td>
         </tr>

@@ -2,7 +2,9 @@
 
 class Core
 {
-    private $user_id = null;
+    private $user_id = 0;
+
+    private $access_id = 0;
 
     private $controller = null;
 
@@ -22,11 +24,12 @@ class Core
         if(isset($_SESSION['user_id']) && isset($_SESSION['login']))
         {
             $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-            $query = $db->query("SELECT id FROM staff_login WHERE id = '{$_SESSION['user_id']}' and login = '{$_SESSION['login']}'");
+            $query = $db->query("SELECT id, access_id FROM staff_login WHERE id = '{$_SESSION['user_id']}' and login = '{$_SESSION['login']}'");
 
             if(!empty($result = mysqli_fetch_array($query)))
             {
                 $this->user_id = $result['id'];
+                $this->access_id = $result['access_id'];
             }
             else session_destroy();
         }
@@ -34,12 +37,11 @@ class Core
     
     private function getUrl()
     {
-        if (!$this->user_id && !isset($_POST['login']) && !isset($_POST['passw'])) {
+        if (($this->user_id == 0 || $this->access_id == 0) && (!isset($_POST['login']) && !isset($_POST['passw']))) {
             $this->controller = 'home';
             $this->action = 'login';
         } elseif (isset($_GET['url'])) {
             $url = htmlspecialchars(trim($_GET['url'], '/'));
-            $url = filter_var($url, FILTER_SANITIZE_URL);
             $url = explode('/', $url);
 
             $this->controller = isset($url[0]) ? $url[0] : null;

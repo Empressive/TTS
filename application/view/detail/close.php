@@ -1,7 +1,7 @@
 <form method='post'>
     <table id='close'>
         <tr>
-            <th colspan='2'>Информация о заявке №<? echo $id ?></th>
+            <th colspan='2'>Информация о заявке №<?= $id ?></th>
         </tr>
         <tr>
             <td>Статус :</td>
@@ -13,17 +13,15 @@
             <td>Причина :</td>
             <td>
                 <select name='reason'>
-                    <?
-                    foreach ($reasons as $reason) {
-                        echo "<option value='{$reason['reason_id']}'>{$reason['reason']}</option>";
-                    }
-                    ?>
+                    <? foreach ($reasons as $reason) : ?>
+                        <option value='<?= $reason['reason_id'] ?>'><?= $reason['reason'] ?></option>
+                    <? endforeach; ?>
                 </select>
             </td>
         </tr>
         <tr>
-            <td><input type='submit' value='Отмена' formaction='<? echo URL . 'detail/view/' . $id; ?>'></td>
-            <td><input type='submit' value='Сохранить' formaction='<? echo URL . 'tickets/close/' . $id; ?>'></td>
+            <td><input type='submit' value='Отмена' formaction='<?= URL . 'detail/view/' . $id; ?>'></td>
+            <td><input type='submit' value='Сохранить' formaction='<?= URL . 'tickets/close/' . $id; ?>'></td>
         </tr>
     </table>
 </form>

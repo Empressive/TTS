@@ -67,6 +67,7 @@ class Tickets extends Controller
                 if ($_POST['time_date'] != null) {
                     $this->model->insert("UPDATE tickets SET time_date = '{$_POST['time_date']}', status_id = '{$_POST['status']}', category_id = '{$_POST['category']}', staff_group_id = '{$_POST['staff_group']}', location_id = '{$_POST['location']}', house = '{$_POST['house']}', driveway = '{$_POST['driveway']}', floor = '{$_POST['floor']}', flat = '{$_POST['flat']}', phone = '{$_POST['phone']}', comment = '{$_POST['comment']}' WHERE id = '{$id}'");
                 } else $this->model->insert("UPDATE tickets SET time_date = NULL, status_id = '{$_POST['status']}', category_id = '{$_POST['category']}', staff_group_id = '{$_POST['staff_group']}', location_id = '{$_POST['location']}', house = '{$_POST['house']}', driveway = '{$_POST['driveway']}', floor = '{$_POST['floor']}', flat = '{$_POST['flat']}', phone = '{$_POST['phone']}', comment = '{$_POST['comment']}' WHERE id = '{$id}'");
+                setcookie('status', 'success', time() + 1, '/');
                 header('Location:' . URL . 'detail/view/' . $id . '/');
             } else {
                 if ($_POST['time_date'] != null) {
@@ -77,6 +78,17 @@ class Tickets extends Controller
                 header('Location:' . URL . 'detail/close/' . $id . '/');
             }
         } else header('Location:' . URL . 'detail/view/' . $id . '/');
+    }
+
+    public function comment($id)
+    {
+        if (isset($_POST['comment2']) && !empty($id) && $_POST['comment2'] != null) {
+            $n_date = date('Y-m-d H:i:s');
+            $_POST['comment2'] = htmlspecialchars(trim($_POST['comment2']));
+
+            $this->model->insert("INSERT INTO comments (comment_id, now_date, staff_name_id, comment, comment_type_id) VALUES ('$id', '$n_date', '{$_SESSION['user_id']}', '{$_POST['comment2']}', '2')");
+            header('Location: ' . URL . 'detail/view/' . $id . '/');
+        } else header('Location:' . URL);
     }
 
     public function close($id)
@@ -92,7 +104,7 @@ class Tickets extends Controller
             $this->model->insert("INSERT INTO comments (comment_id, now_date, staff_name_id, comment, comment_type_id) VALUES ('$id', '$n_date', '{$_SESSION['user_id']}', 'Причина закрытия: {$reason['reason']}', '1')");
             $this->model->insert("UPDATE tickets SET status_id = '{$_POST['status']}', reason_id = '{$_POST['reason']}' WHERE id = '{$id}'");
 
-        }
-        else header('Location:' . URL);
+            header('Location:' . URL . 'detail/view/' . $id . '/');
+        } else header('Location:' . URL);
     }
 }

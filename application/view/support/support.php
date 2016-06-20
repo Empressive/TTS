@@ -19,4 +19,4 @@
     }
     ?>
 </table>
-<input type='submit' value='Добавить предложение' id='button' onclick="location.href='<?echo URL . 'support/add/';?>'">
+<input type='submit' value='Добавить предложение' id='button' onclick="location.href='<?= URL . 'support/add/';?>'">

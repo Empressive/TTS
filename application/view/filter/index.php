@@ -24,6 +24,5 @@
             echo "<tr bgcolor='{$ticket['status_color']}'><td id='pointer' onclick=\"location.href='/detail/view/{$ticket['id']}'\">{$ticket['id']}</td><td>{$ticket['time_date']}</td><td>{$ticket['now_date']}</td><td>{$ticket['category']}</td><td>{$ticket['staff_group']}</td><td>{$ticket['agreement']}</td><td>{$ticket['location']}<table class='border' width='100%'><td>{$ticket['house']}</td><td>{$ticket['driveway']}</td><td>{$ticket['floor']}</td><td>{$ticket['flat']}</td></table><td>{$ticket['comment']}</td></tr>";
         }
     } else echo "<tr bgcolor='{$tickets['status_color']}'><td id='pointer' onclick=\"location.href='/detail/view/{$tickets['id']}'\">{$tickets['id']}</td><td>{$tickets['time_date']}</td><td>{$tickets['now_date']}</td><td>{$tickets['category']}</td><td>{$tickets['staff_group']}</td><td>{$tickets['agreement']}</td><td>{$tickets['location']}<table class='border' width='100%'><td>{$tickets['house']}</td><td>{$tickets['driveway']}</td><td >{$tickets['floor']}</td><td>{$tickets['flat']}</td></table><td>{$tickets['comment']}</td></tr>";
-
     ?>
 </table>

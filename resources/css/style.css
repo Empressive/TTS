@@ -1,9 +1,11 @@
 .page {
+    min-width: 700px;
     width: 90%;
     margin: 0 auto;
 }
 
 .menu {
+    overflow: hidden;
     width: 100%;
     height: 50px;
     background-color: #339999;
@@ -76,7 +78,6 @@ input[type=text], select {
 }
 
 table {
-    overflow: hidden;
     table-layout: fixed;
     font-size: 14px;
     border-radius: 10px;
@@ -253,5 +254,70 @@ a:visited {
 }
 
 #reset {
+    cursor: pointer;
+}
+
+.alert {
+    font-weight: bold;
+    text-align: center;
+}
+
+.scroll {
+    display: none;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #339999;
+    opacity: .3;
+    height: 120%;
+    width: 95px;
+    position: fixed;
+    margin: -8px 0 0 -30px;
+}
+
+.scroll:hover {
+    opacity: .7;
+}
+
+.scroll span {
+    position: absolute;
+    margin: 35px 0 0 30px;
+}
+
+.print {
+    opacity: .4;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+}
+
+.print:hover {
+    opacity: 1;
+}
+
+#fix_button {
+    display: none;
+    position: fixed;
+    margin: 30% 0 0 90%;
+    outline: none;
+    background: none;
+    border-style: none;
+}
+
+#modal {
+    display: none;
+    margin: -5% 0 0 -5.5%;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#modal_table {
+    cursor: pointer;
+    table-layout: fixed;
+    margin: 8% auto;
+    width: 60%;
+}
+
+#active {
     cursor: pointer;
 }

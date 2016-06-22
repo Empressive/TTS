@@ -76,6 +76,11 @@ class Admin extends Controller
                 $this->model->insert("UPDATE staff_login SET login = '{$_POST['login']}', staff_name = '{$_POST['username']}', staff_group_id = '{$_POST['staff_group']}', access_id = '{$_POST['access']}' WHERE id = '{$id}'");
                 $this->model->insert("UPDATE staff_login SET staff_name = '{$_POST['username']}' WHERE id = '{$id}'");
 
+                if($_POST['staff_group'] == 4)
+                {
+                    $this->model->insert("UPDATE millwright SET staff_name = '{$_POST['username']}' WHERE staff_name = '{$_POST['old_name']}'");
+                }
+
                 if (!empty($_POST['passw']) && !empty($_POST['passw2'])) {
                     if ($_POST['passw'] === $_POST['passw2']) {
                         $_POST['passw'] = password_hash($_POST['passw'], PASSWORD_BCRYPT);

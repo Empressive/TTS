@@ -79,24 +79,46 @@
         </tr>
         <tr>
             <td>Дом:</td>
-            <td><input type='text' <?= $access ?> value='<?= $items['house'] ?>' autocomplete='off' name='house' pattern="^[0-9]+[^0-9]*[0-9]*[^0-9]*$"></td>
+            <td><input type='text' <?= $access ?> value='<?= $items['house'] ?>' autocomplete='off' name='house'
+                       pattern="^[0-9]+[^0-9]*[0-9]*[^0-9]*$"></td>
         </tr>
         <tr>
             <td>Подъезд:</td>
-            <td><input type='text' <?= $access ?> value='<?= $items['driveway'] ?>' autocomplete='off' name='driveway' pattern="^[0-9]+[^0-9]*[0-9]*[^0-9]*$"></td>
+            <td><input type='text' <?= $access ?> value='<?= $items['driveway'] ?>' autocomplete='off' name='driveway'
+                       pattern="^[0-9]+[^0-9]*[0-9]*[^0-9]*$"></td>
         </tr>
         <tr>
             <td>Этаж:</td>
-            <td><input type='text' <?= $access ?> value='<?= $items['floor'] ?>' autocomplete='off' name='floor' pattern="^[0-9]+[^0-9]*[0-9]*[^0-9]*$"></td>
+            <td><input type='text' <?= $access ?> value='<?= $items['floor'] ?>' autocomplete='off' name='floor'
+                       pattern="^[0-9]+[^0-9]*[0-9]*[^0-9]*$"></td>
         </tr>
         <tr>
             <td>Квартира:</td>
-            <td><input type='text' <?= $access ?> value='<?= $items['flat'] ?>' autocomplete='off' name='flat' pattern="^[0-9]+[^0-9]*[0-9]*[^0-9]*$"></td>
+            <td><input type='text' <?= $access ?> value='<?= $items['flat'] ?>' autocomplete='off' name='flat'
+                       pattern="^[0-9]+[^0-9]*[0-9]*[^0-9]*$"></td>
         </tr>
         <tr>
             <td>Телефон:</td>
             <td><input type='text' id='phone' <?= $access ?> value='<?= $items['phone'] ?>' name='phone' required></td>
         </tr>
+        <? if ($millwright_rows > 1): ?>
+            <tr>
+                <td colspan='2' id='td_color'>Монтажники</td>
+            </tr>
+            <? foreach ($millwrights as $millwright): ?>
+                <tr>
+                    <td colspan='2'><?= $millwright['staff_name'] ?></td>
+                </tr>
+            <? endforeach; ?>
+        <? endif; ?>
+        <? if ($millwright_rows == 1): ?>
+            <tr>
+                <td colspan='2' id='td_color'>Монтажники</td>
+            </tr>
+            <tr>
+                <td colspan='2'><?= $millwrights['staff_name'] ?></td>
+            </tr>
+        <? endif; ?>
         <tr>
             <td colspan='2' id='td_color'>Текст заявки</td>
         </tr>

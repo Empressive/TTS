@@ -28,7 +28,7 @@
             </tr>
             <tr>
                 <td>Ф.И.О сотрудника</td>
-                <td><input type='text' name='username' value='<?= $info['staff_name'] ?>' required></td>
+                <td><input type='text' name='username' value='<?= $info['staff_name'] ?>' required><input type='text' name='old_name' value='<?= $info['staff_name'] ?>' hidden></td>
             </tr>
             <tr>
                 <td>Группа пользователя</td>

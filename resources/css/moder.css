@@ -31,7 +31,7 @@ body {
     margin: 20px 0 0 20px;
     position: absolute;
     width: 240px;
-    height: 160px;
+    height: 80px;
     padding: 10px 10px 10px 10px;
     border-radius: 7px;
     background-color: #5c677e;
@@ -145,6 +145,11 @@ tr td:last-child {
     border-right: none;
 }
 
+.big_table {
+    width: 50%;
+    margin: 20px auto;
+}
+
 .mid_table {
     width: 40%;
     margin: 20px auto;
@@ -155,6 +160,24 @@ tr td:last-child {
     margin: 20px auto;
 }
 
+.border {
+    text-align: center;
+    border: none;
+    box-shadow: none;
+}
+
+#td_color {
+    color: white;
+    box-shadow: none;
+    font-weight: bold;
+    border: none;
+}
+
+.td_color {
+    box-shadow: none;
+    border: none;
+}
+
 input[type=submit] {
     width: 200px;
     height: 35px;
@@ -162,6 +185,14 @@ input[type=submit] {
     outline: none;
     color: white;
     background-color: #5c677e;
+}
+
+#pointer {
+    cursor: pointer;
+}
+
+#pointer:hover {
+    background-color: #76819b;
 }
 
 #colon tr td{

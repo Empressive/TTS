@@ -20,6 +20,11 @@ class Detail extends Controller
 
                 $link = str_replace('/', '-', $items['agreement']);
 
+                $millwright_rows = $this->model->rows("SELECT ticket_id FROM millwright_list WHERE ticket_id = '{$id}'");
+                if ($millwright_rows > 0) {
+                    $millwrights = $this->model->select("SELECT staff_name FROM millwright_list INNER JOIN millwright USING (millwright_id) WHERE ticket_id = '{$id}'");
+                }
+                
                 $statuses = $this->model->select("SELECT status, status_id FROM status WHERE status_id != '{$items['status_id']}' and status_id != 0 and status_id != 1");
                 $categoryes = $this->model->select("SELECT category, category_id FROM category WHERE category_id != '{$items['category_id']}' and category_id != 0");
                 $staff_groups = $this->model->select("SELECT staff_group, staff_group_id FROM staff_group WHERE staff_group_id != '{$items['staff_group_id']}' and staff_group_id != 0 and staff_group_id != 1");
@@ -33,8 +38,7 @@ class Detail extends Controller
                 require APP . 'view/detail/index.php';
                 require APP . 'view/detail/comment_log.php';
                 require APP . 'view/templates/footer.php';
-            }
-            else $this->model->error('Мне кажется, ты пытаешься что-то сломать o_O');
+            } else $this->model->error('Мне кажется, ты пытаешься что-то сломать o_O');
         }
     }
 

@@ -1,4 +1,4 @@
-<? if (isset($tickets) && empty($id)) : ?>
+﻿<? if (isset($tickets) && empty($id)) : ?>
     <table class='big_table'>
         <tr>
             <th width='9%'>ID</th>
@@ -98,4 +98,3 @@
         </table>
     <? endif; ?>
 <? endif; ?>
-<div id='result'></div>

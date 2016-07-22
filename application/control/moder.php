@@ -35,13 +35,11 @@ class Moder extends Controller
 
     public function user($id)
     {
-        if (empty($id))
-        {
+        if (empty($id)) {
             $millwrights = $this->model->select("SELECT millwright_id, staff_name, millwright_status FROM millwright INNER JOIN millwright_status USING (millwright_status_id) ORDER BY millwright_status_id ASC");
-        }
-        else {
+        } else {
             $rows = $this->model->rows("SELECT millwright_id FROM millwright WHERE millwright_id = '{$id}'");
-            if($rows > 0) {
+            if ($rows > 0) {
                 $items = $this->model->select("SELECT staff_name, millwright_status_id, millwright_status FROM millwright INNER JOIN millwright_status USING (millwright_status_id) WHERE millwright_id = '{$id}'");
                 $status = $this->model->select("SELECT * FROM millwright_status WHERE millwright_status_id != '{$items['millwright_status_id']}'");
             }
@@ -51,24 +49,44 @@ class Moder extends Controller
         require APP . 'view/templates/footer.php';
     }
 
+    public function stats($id)
+    {
+        $s_date = date('Y-m-' . '01');
+        $e_date = date('Y-m-t');
+        
+        if (empty($id)) {
+            $millwrights = $this->model->select("SELECT staff_name, millwright_id FROM millwright WHERE millwright_status_id = 1 ORDER BY staff_name ASC");
+        } else {
+            $staff_name = $this->model->select("SELECT staff_name FROM millwright WHERE millwright_id = '{$id}'");
+            if ($staff_name != null) {
+                $s_tickets = $this->model->rows("SELECT id FROM tickets, millwright_list WHERE ticket_id = id and millwright_id = '{$id}' and time_date BETWEEN '{$s_date}' and '{$e_date}'");
+                $all_tickets = $this->model->rows("SELECT id FROM tickets WHERE time_date BETWEEN '{$s_date}' and '{$e_date}'");
+
+                $active = $s_tickets / ($all_tickets / 100) . '%';
+                $default = $this->model->rows("SELECT id FROM tickets, millwright_list WHERE ticket_id = id and status_id = 3 and millwright_id = '{$id}' and time_date BETWEEN '{$s_date}' AND '{$e_date}'");
+                $touched = $this->model->rows("SELECT id FROM tickets, millwright_list WHERE ticket_id = id and status_id = 4 and millwright_id = '{$id}' and time_date BETWEEN '{$s_date}' AND '{$e_date}'");
+                $closed = $this->model->rows("SELECT id FROM tickets, millwright_list WHERE ticket_id = id and status_id = 2 and millwright_id = '{$id}' and time_date BETWEEN '{$s_date}' AND '{$e_date}'");
+            }
+        }
+        require APP . 'view/templates/m_header.php';
+        require APP . 'view/moder/stats.php';
+        require APP . 'view/templates/footer.php';
+    }
+
+
     public function millwright($action)
     {
         if ($action == 'delete' && !empty($_POST['millwright_id']) && !empty($_POST['ticket_id'])) {
             $this->model->insert("DELETE FROM millwright_list WHERE millwright_id = '{$_POST['millwright_id']}' and ticket_id = '{$_POST['ticket_id']}'");
-        }
-
-        elseif ($action == 'insert' && !empty($_POST['millwright_id']) && !empty($_POST['ticket_id'])) {
+        } elseif ($action == 'insert' && !empty($_POST['millwright_id']) && !empty($_POST['ticket_id'])) {
             $rows = $this->model->rows("SELECT millwright_id FROM millwright_list WHERE ticket_id = '{$_POST['ticket_id']}' and millwright_id = '{$_POST['millwright_id']}'");
 
             if ($rows == 0) {
                 $this->model->insert("INSERT INTO millwright_list (ticket_id, millwright_id) VALUES ('{$_POST['ticket_id']}', '{$_POST['millwright_id']}')");
             }
-        }
-        elseif ($action == 'edit' && !empty($_POST['staff_id']) && !empty($_POST['access']))
-        {
+        } elseif ($action == 'edit' && !empty($_POST['staff_id']) && !empty($_POST['access'])) {
             $this->model->insert("UPDATE millwright SET millwright_status_id = '{$_POST['access']}' WHERE millwright_id = '{$_POST['staff_id']}'");
             header('Location:' . URL . 'moder/user/');
-        }
-        else $this->model->error('Опять ты ?????');
+        } else $this->model->error('Опять ты ?????');
     }
 }

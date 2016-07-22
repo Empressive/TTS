@@ -1,4 +1,4 @@
-﻿<? if (isset($tickets) && empty($id)) : ?>
+<? if (isset($tickets) && empty($id)) : ?>
     <table class='big_table'>
         <tr>
             <th width='9%'>ID</th>
@@ -17,7 +17,7 @@
         </tr>
         <? if ($rows > 1) : ?>
             <? foreach ($tickets as $ticket): ?>
-                <? $ticket['comment'] = mb_substr($ticket['comment'], 0, 60) . '...' ?>
+                <? $ticket['comment'] = mb_substr($ticket['comment'], 0, 30) . '...' ?>
                 <tr>
                     <td id='pointer'
                         onclick="location.href='<?= URL ?>moder/ticket/<?= $ticket['id'] ?>/'"><?= $ticket['id'] ?></td>
@@ -98,3 +98,4 @@
         </table>
     <? endif; ?>
 <? endif; ?>
+<div id='result'></div>

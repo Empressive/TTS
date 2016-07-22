@@ -24,7 +24,7 @@ class Detail extends Controller
                 if ($millwright_rows > 0) {
                     $millwrights = $this->model->select("SELECT staff_name FROM millwright_list INNER JOIN millwright USING (millwright_id) WHERE ticket_id = '{$id}'");
                 }
-                
+
                 $statuses = $this->model->select("SELECT status, status_id FROM status WHERE status_id != '{$items['status_id']}' and status_id != 0 and status_id != 1");
                 $categoryes = $this->model->select("SELECT category, category_id FROM category WHERE category_id != '{$items['category_id']}' and category_id != 0");
                 $staff_groups = $this->model->select("SELECT staff_group, staff_group_id FROM staff_group WHERE staff_group_id != '{$items['staff_group_id']}' and staff_group_id != 0 and staff_group_id != 1");
@@ -45,11 +45,13 @@ class Detail extends Controller
     public function close($id)
     {
         if (!empty($id)) {
-            if ($this->model->rows("SELECT id FROM tickets WHERE id = {$id} and status_id != 1 and status_id != 2") > 0) {
-                $reasons = $this->model->select("SELECT * FROM reason WHERE reason_id != 0");
-                require APP . 'view/templates/header.php';
-                require APP . 'view/detail/close.php';
-                require APP . 'view/templates/footer.php';
+            if ($this->model->rows("SELECT id FROM tickets WHERE id = {$id}") > 0) {
+                if ($this->model->rows("SELECT id FROM tickets WHERE status_id != 1 and status_id != 2 WHERE id = {$id}") > 0 || $this->access_id > 2) {
+                    $reasons = $this->model->select("SELECT * FROM reason WHERE reason_id != 0");
+                    require APP . 'view/templates/header.php';
+                    require APP . 'view/detail/close.php';
+                    require APP . 'view/templates/footer.php';
+                } else $this->model->error('Ну вот, ты опять все сломал !');
             } else $this->model->error('Ну вот, ты опять все сломал !');
         } else $this->model->error('Мне кажется, ты пытаешься что-то сломать o_O');
     }

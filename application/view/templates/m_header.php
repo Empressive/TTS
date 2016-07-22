@@ -19,10 +19,11 @@
 <body>
 <div class='scroll'><span>⯅Наверх</span></div>
 <div class='page'>
-    <div class='navigation'><span onclick="location.href='<?= URL . 'moder/' ?>'" class='logo'>TTS Control Center</span><span class='web' onclick="location.href='<?= URL ?>'">Main Web</span></div>
+    <div class='navigation'><span onclick="location.href='<?= URL . 'moder/' ?>'" class='logo'>TTS Control Center</span><span class='web' onclick="window.open('<?= URL ?>', target='_blank')">Main Web</span></div>
     <div class='menu'>
         <ul>
             <li><a href='<?= URL . 'moder/ticket/' ?>'>Управление заявками</a></li>
+            <li><a href='<?= URL . 'moder/stats/' ?>'>Статистика монтажников</a></li>
             <li><a href='<?= URL . 'moder/user/' ?>'>Изменение монтажников</a></li>
         </ul>
     </div>

@@ -61,7 +61,7 @@ class Admin extends Controller
                     $staff_groups = $this->model->select("SELECT * FROM staff_group WHERE staff_group_id != 0 and staff_group_id != 1 and staff_group_id != '{$info['staff_group_id']}'");
                 }
             } else {
-                $all = $this->model->select("SELECT login, staff_name, access, id FROM staff_login INNER JOIN access USING (access_id) ORDER BY login ASC");
+                $all = $this->model->select("SELECT login, staff_name, access, id FROM staff_login INNER JOIN access USING (access_id) ORDER BY access_id DESC");
             }
             require APP . 'view/templates/a_header.php';
             require APP . 'view/admin/edit.php';

@@ -321,3 +321,14 @@ a:visited {
 #active {
     cursor: pointer;
 }
+
+.index {
+    cursor: pointer;
+    margin: -15px 0 0 85%;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 10px;
+    text-align: center;
+}

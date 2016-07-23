@@ -19,7 +19,7 @@
 <body>
 <div class='scroll'><span>⯅Наверх</span></div>
 <div class='page'>
-    <div class='navigation'><span onclick="location.href='<?= URL . 'admin/'?>'" class='logo'>TTS Control Center</span><span class='web' onclick="window.open('<?= URL ?>', target='_blank')">Main Web</span></div>
+    <div class='navigation'><span onclick="location.href='<?= URL . 'admin/'?>'" class='logo'>TTS Control Center</span><span class='suggestion' onclick="location.href='<?= URL ?>admin/suggestion/'">Suggestion</span><span class='web' onclick="window.open('<?= URL ?>', target='_blank')">Main Web</span></div>
     <div class='menu'>
         <ul>
             <li><a href='<?= URL . 'admin/user/' ?>'>Добавить сотрудника</a></li>

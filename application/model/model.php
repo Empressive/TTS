@@ -69,7 +69,7 @@ class Model
             $staff_group = intval($_POST['staff_group']);
             $agreement = htmlspecialchars(trim($_POST['agreement']));
 
-            if($date != null) $this->db->query("UPDATE staff_login SET status_id = '{$status}', category_id = '{$category}', time_date = '{$date}', group_id = '{$staff_group}', agreement = '{$agreement}'");
+            if ($date != null) $this->db->query("UPDATE staff_login SET status_id = '{$status}', category_id = '{$category}', time_date = '{$date}', group_id = '{$staff_group}', agreement = '{$agreement}' WHERE id = '{$_SESSION['user_id']}'");
             else $this->db->query("UPDATE staff_login SET status_id = '{$status}', category_id = '{$category}', time_date = NULL, group_id = '{$staff_group}', agreement = '{$agreement}'");
 
 
@@ -89,18 +89,29 @@ class Model
 
             $query = $this->db->query("SELECT * FROM tickets INNER JOIN category using(category_id) INNER JOIN location using(location_id) INNER JOIN staff_group using(staff_group_id) INNER JOIN status using(status_id) WHERE {$status} {$category} {$date} {$staff_group} {$agreement} ORDER BY id DESC limit {$offset}, {$limit}");
 
-            if(empty($_POST['json']))
-            {
+            $staff_group_id = $this->db->query("SELECT staff_group_id FROM staff_login WHERE id = '{$_SESSION['user_id']}'");
+            $staff_group_id = mysqli_fetch_array($staff_group_id);
+
+            $n_date = date('Y-m-d');
+            $tickets = $this->db->query("SELECT id FROM tickets WHERE status_id != 0 and status_id != 1 and status_id != 2 and staff_group_id = '{$staff_group_id['staff_group_id']}' and time_date BETWEEN '0000-00-00' and '{$n_date}'");
+            $tickets = mysqli_num_rows($tickets);
+
+            if (empty($_POST['json'])) {
                 echo "<table class='main_table' id='main_table' border='1'>";
-                echo "<tr><th colspan='9'>Количество заявок: <span id='reset'>$result</span></th></tr>";
+                if ($tickets > 0) {
+                    echo "<tr><th colspan='9'>Количество заявок: <span id='reset'>$result</span><div class='index' onclick=\"location.href= 'home/tickets/'\"><span>$tickets</span></div></th></tr>";
+                } else {
+                    echo "<tr><th colspan='9'>Количество заявок: <span id='reset'>$result</span></th></tr>";
+
+                }
                 echo "<tr bgcolor='#339999'>";
                 echo "<td width='3%'><input type='checkbox' id='check'></td>";
-                echo "<td width='9%' id='td_color'>Номер заявки</td>";
+                echo "<td width='8%' id='td_color'>Номер заявки</td>";
                 echo "<td width='10%' id='td_color'>Дата принятия</td>";
                 echo "<td width='10%' id='td_color'>Дата выполнения</td>";
                 echo "<td width='12%' id='td_color'>Категория</td>";
-                echo "<td width='12%' id='td_color'>Исполнитель</td>";
-                echo "<td width='6%' id='td_color'>Договор</td>";
+                echo "<td width='11%' id='td_color'>Исполнитель</td>";
+                echo "<td width='8%' id='td_color'>Договор</td>";
                 echo "<td width='15%' id='td_color'>Адрес<table class='border' width=100%><tr><td id='td_color'>дом</td><td id='td_color'>под.</td><td id='td_color'>эт.</td><td id='td_color'>кв.</td></tr></table></td>";
                 echo "<td width='23%' id='td_color'>Комментарий</td>";
                 echo "</tr>";
@@ -111,22 +122,20 @@ class Model
                         $result['comment'] = mb_substr($result['comment'], 0, 30) . '...';
                     }
                     if (strripos($result['agreement'], 0x20) === false && mb_strlen($result['comment']) > 6) {
-                        $result['agreement'] = mb_substr($result['agreement'], 0, 5);
+                        $result['agreement'] = mb_substr($result['agreement'], 0, 7);
                     }
                     echo "<tr bgcolor='{$result['status_color']}'><td><input id='checkbox' type='checkbox' name='id[]' value='{$result['id']}'></td><td id='pointer' onclick=\"location.href= 'detail/view/{$result['id']}/'\">{$result['id']}</td><td>{$result['now_date']}</td><td>{$result['time_date']}</td><td>{$result['category']}</td><td>{$result['staff_group']}</td><td>{$result['agreement']}</td><td>{$result['location']}<table class='border' width=100%><tr><td>{$result['house']}</td></td><td>{$result['driveway']}</td><td>{$result['floor']}</td><td>{$result['flat']}</td></tr></table></td><td>{$result['comment']}</td></tr>";
                 }
                 echo "<table>";
-            }
-            else {
+            } else {
                 $items = array();
-                while ($result = mysqli_fetch_array($query))
-                {
+                while ($result = mysqli_fetch_array($query)) {
                     if (strripos($result['comment'], 0x20) === false && mb_strlen($result['comment']) > 30) {
                         mb_internal_encoding("UTF-8");
                         $result['comment'] = mb_substr($result['comment'], 0, 30) . '...';
                     }
                     if (strripos($result['agreement'], 0x20) === false && mb_strlen($result['comment']) > 6) {
-                        $result['agreement'] = mb_substr($result['agreement'], 0, 5);
+                        $result['agreement'] = mb_substr($result['agreement'], 0, 7);
                     }
                     $items[] = $result;
                 }

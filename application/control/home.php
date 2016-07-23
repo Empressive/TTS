@@ -61,6 +61,22 @@ class Home extends Controller
         } else header('Location:' . URL);
     }
 
+    public function tickets() {
+        $staff_group_id = $this->model->select("SELECT staff_group_id FROM staff_login WHERE id = '{$_SESSION['user_id']}'");
+        $n_date = date('Y-m-d');
+
+        $rows = $this->model->rows("SELECT id FROM tickets WHERE status_id != 0 and status_id != 1 and status_id != 2 and staff_group_id = '{$staff_group_id['staff_group_id']}' and time_date BETWEEN '0000-00-00' and '{$n_date}'");
+        $tickets = $this->model->select("SELECT * FROM tickets INNER JOIN category using(category_id) INNER JOIN location using(location_id) INNER JOIN staff_group using(staff_group_id) INNER JOIN status using(status_id) WHERE status_id != 0 and status_id != 1 and status_id != 2 and staff_group_id = '{$staff_group_id['staff_group_id']}' and time_date BETWEEN '0000-00-00' and '{$n_date}'");
+
+        if($tickets != null)
+        {
+            require APP . 'view/templates/header.php';
+            require APP . 'view/home/tickets.php';
+            require APP . 'view/templates/footer.php';
+        }
+        else $this->model->error('Хватит все ломать !');
+    }
+
     public function auth()
     {
         $this->model->login();

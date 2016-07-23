@@ -76,8 +76,7 @@ class Admin extends Controller
                 $this->model->insert("UPDATE staff_login SET login = '{$_POST['login']}', staff_name = '{$_POST['username']}', staff_group_id = '{$_POST['staff_group']}', access_id = '{$_POST['access']}' WHERE id = '{$id}'");
                 $this->model->insert("UPDATE staff_login SET staff_name = '{$_POST['username']}' WHERE id = '{$id}'");
 
-                if($_POST['staff_group'] == 4)
-                {
+                if ($_POST['staff_group'] == 4) {
                     $this->model->insert("UPDATE millwright SET staff_name = '{$_POST['username']}' WHERE staff_name = '{$_POST['old_name']}'");
                 }
 
@@ -156,5 +155,27 @@ class Admin extends Controller
                 header('Location:' . URL . 'admin/update/' . $type);
             } else $this->model->error('Ты пытаешься найти то, чего нет.');
         } else header('Location:' . URL . 'admin/');
+    }
+
+    public function suggestion()
+    {
+        if (empty($_POST)) {
+            $rows = $this->model->rows("SELECT suggestion_id FROM suggestion");
+            $suggestions = $this->model->select("SELECT suggestion_id, now_date, staff_name, subject, comment, status_color FROM suggestion INNER JOIN status USING (status_id) INNER JOIN staff_login ON (staff_name_id = id) ORDER BY suggestion.status_id ASC");
+
+            if ($suggestions != null) {
+                require APP . 'view/templates/a_header.php';
+                require APP . 'view/admin/suggestions.php';
+                require APP . 'view/templates/footer.php';
+            } else $this->model->error('Извини, но пока нет ни одного предложения :(');
+        } elseif (!empty($_POST['id'])) {
+            foreach ($_POST['id'] as $key => $value) {
+                $status = $this->model->select("SELECT status_id FROM suggestion WHERE suggestion_id = '{$value}'");
+                if ($status['status_id'] == 2) $this->model->insert("UPDATE suggestion SET status_id = 3 WHERE suggestion_id = '$value'");
+                elseif ($status['status_id'] == 3) $this->model->insert("UPDATE suggestion SET status_id = 4 WHERE suggestion_id = '$value'");
+                elseif ($status['status_id'] == 4) $this->model->insert("UPDATE suggestion SET status_id = 2 WHERE suggestion_id = '$value'");
+                header('Location:' . URL . 'admin/suggestion/');
+            }
+        }
     }
 }

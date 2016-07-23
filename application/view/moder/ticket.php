@@ -98,4 +98,3 @@
         </table>
     <? endif; ?>
 <? endif; ?>
-<div id='result'></div>

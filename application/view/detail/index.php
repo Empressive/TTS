@@ -141,25 +141,33 @@
             <td>Сотрудник</td>
             <td>Комментарий</td>
         </tr>
-        <?
-        if ($comment_rows > 1) {
-            foreach ($comments as $comment) {
-                if ($comment['comment_type_id'] == 2) $color = '#cccccc';
-                else $color = null;
-                if (strripos($comment['comment'], 0x20) === false && mb_strlen($comment['comment']) > 30) {
-                    $comment['comment'] = mb_substr($comment['comment'], 0, 30) . '...';
-                }
-                echo "<tr bgcolor='$color'><td>{$comment['now_date']}</td><td>{$comment['staff_name']}</td><td>{$comment['comment']}</td></t></tr>";
-            }
-        } elseif ($comments != null && $comment_rows < 2) {
-            if ($comments['comment_type_id'] == 2) $color = '#cccccc';
-            else $color = null;
-            if (strripos($comments['comment'], 0x20) === false && mb_strlen($comments['comment']) > 30) {
-                $comments['comment'] = mb_substr($comments['comment'], 0, 30) . '...';
-            }
-            echo "<tr bgcolor='$color'><td>{$comments['now_date']}</td><td>{$comments['staff_name']}</td><td>{$comments['comment']}</td></t></tr>";
-        }
-        ?>
+        <? if ($comment_rows > 1): ?>
+            <? foreach ($comments as $comment): ?>
+                <? if ($comment['comment_type_id'] == 2): $color = '#cccccc'; ?>
+                <? else: $color = null; ?>
+                <? endif; ?>
+
+                <? if (strripos($comment['comment'], 0x20) === false && mb_strlen($comment['comment']) > 30): $comment['comment'] = mb_substr($comment['comment'], 0, 30) . '...'; ?>
+                <? endif; ?>
+                <tr bgcolor='<?= $color; ?>'>
+                    <td><?= $comment['now_date']; ?></td>
+                    <td><?= $comment['staff_name']; ?></td>
+                    <td><?= $comment['comment']; ?></td>
+                </tr>
+            <? endforeach; ?>
+        <? else: ?>
+            <? if ($comments['comment_type_id'] == 2): $color = '#cccccc'; ?>
+            <? else: $color = null; ?>
+            <? endif; ?>
+
+            <? if (strripos($comments['comment'], 0x20) === false && mb_strlen($comments['comment']) > 30): $comments['comment'] = mb_substr($comments['comment'], 0, 30) . '...'; ?>
+            <? endif; ?>
+            <tr bgcolor='<?= $color; ?>'>
+                <td><?= $comments['now_date']; ?></td>
+                <td><?= $comments['staff_name']; ?></td>
+                <td><?= $comments['comment']; ?></td>
+            </tr>
+        <? endif; ?>
         <tr>
             <td colspan='3' id='td_color'><span id='active'>Комментарий</span></td>
         </tr>

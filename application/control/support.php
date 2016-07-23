@@ -4,7 +4,7 @@ class Support extends Controller
     public function index()
     {
         $suggestions = $this->model->select("SELECT now_date, staff_name, subject, comment, status_color FROM suggestion INNER JOIN staff_name USING (staff_name_id) INNER JOIN status USING (status_id) ORDER BY suggestion_id DESC LIMIT 20");
-        $rows = $this->model->select("SELECT suggestion_id FROM suggestion ORDER BY suggestion_id DESC LIMIT 20");
+        $rows = $this->model->rows("SELECT suggestion_id FROM suggestion ORDER BY suggestion_id DESC LIMIT 20");
         require APP . 'view/templates/header.php';
         require APP . 'view/support/support.php';
         require APP . 'view/templates/footer.php';
